@@ -300,7 +300,7 @@ MapFish.API = OpenLayers.Class({
         if (config.items.indexOf('ZoomOut') != -1) {
             action = new GeoExt.Action(Ext.apply({
                 map: this.map,
-                control: new OpenLayers.Control.ZoomBox(Ext.apply({out: true},config.controls)),
+                control: new OpenLayers.Control.ZoomBox(Ext.apply({out: true}, config.controls)),
                 toggleGroup: 'navigation',
                 allowDepress: false,
                 //text: 'zoom box',
@@ -595,6 +595,102 @@ MapFish.API = OpenLayers.Class({
 
 
         this.drawLayer.addFeatures(features);
+
+        if (recenter == "true") {
+            this.map.setCenter(new OpenLayers.LonLat(easting, northing));
+        }
+    },
+
+    /*
+     * Shows a GeoExt popup
+     * Options:
+     * - easting : position of the popup
+     *     default: map center
+     * - northing : position of the popup
+     *     default: map center
+     * - title: title of the window
+     *     defaul: ""
+     * - html : html content of the popup
+     *     default: ""
+     * - recenter: define if the map has to recentered at the popup position
+     *     default: false
+     * - width: width of the popup
+     *     default: 200
+     * - collapsible
+     *     default: false
+     * - unpinnable
+     *     default: true
+     */
+    showPopup: function(options) {
+        options = options || {};
+
+        var easting;
+        var northing;
+        var title;
+        var html;
+        var recenter;
+        var width;
+        var collapsible;
+        var unpinnable;
+
+        // Manage options
+        if (options.easting) {
+            easting = options.easting;
+        } else {
+            easting = this.map.getCenter().lon;
+        }
+        if (options.northing) {
+            northing = options.northing;
+        } else {
+            northing = this.map.getCenter().lat;
+        }
+        if (options.title) {
+            title = options.title;
+        } else {
+            title = "";
+        }
+        if (options.html) {
+            html = options.html;
+        } else {
+            html = "";
+        }
+        if (options.recenter) {
+            if (options.recenter == "true" || options.recenter == "True" || options.recenter == "TRUE") {
+                recenter = "true";
+            } else {
+                recenter = "false";
+            }
+        } else {
+            recenter = "false";
+        }
+
+        if (options.width) {
+            width = options.width;
+        } else {
+            width = 200;
+        }
+
+        if (options.collapsible) {
+            collapsible = options.collapsible;
+        } else {
+            collapsible = false;
+        }
+
+        if (options.unpinnable) {
+            unpinnable = options.unpinnable;
+        } else {
+            unpinnable = true;
+        }
+
+        var popup = new GeoExt.Popup({
+            title: title,
+            lonlat: new OpenLayers.LonLat(easting, northing),
+            width: width,
+            html: html,
+            collapsible: collapsible,
+            unpinnable: unpinnable
+        });
+        popup.show();
 
         if (recenter == "true") {
             this.map.setCenter(new OpenLayers.LonLat(easting, northing));
