@@ -683,6 +683,7 @@ MapFish.API = OpenLayers.Class({
         }
 
         var popup = new GeoExt.Popup({
+            map: this.map,
             title: title,
             lonlat: new OpenLayers.LonLat(easting, northing),
             width: width,
