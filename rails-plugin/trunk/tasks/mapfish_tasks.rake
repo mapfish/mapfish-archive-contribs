@@ -7,8 +7,8 @@ task :install_client do
   version='trunk' # 'branches/1.1'
   rm_rf("public/build")
   rm_rf("public/mfbase/")
-  system("svn export http://www.mapfish.org/svn/mapfish/#{version}/MapFish/client/mfbase public/mfbase")
-  system("svn export http://www.mapfish.org/svn/mapfish/#{version}/MapFish/client/build public/build")
+  system("svn export http://www.mapfish.org/svn/mapfish/framework/client/#{version}/mfbase public/mfbase")
+  system("svn export http://www.mapfish.org/svn/mapfish/framework/client/#{version}/build public/build")
 end
 
 desc "Build MapFish release script"
