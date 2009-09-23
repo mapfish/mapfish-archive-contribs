@@ -17,7 +17,7 @@ Create a new Rails project::
 
 Install the latest version of the Mapfish plugin::
 
-  ./script/plugin install http://www.mapfish.org/svn/mapfish/trunk/MapFish/server/ruby/mapfish
+  ./script/plugin install http://www.mapfish.org/svn/mapfish/contribs/rails-plugin/mapfish/trunk
 
 Install the latest version of the Mapfish client libraries::
 
@@ -105,16 +105,15 @@ You can now go back to your webpage and configure MapFish widgets to access your
 Using the print module
 ----------------------
 
-The Rails MapFish plugin can generate a controller for the `MapFish print protocol <http://trac.mapfish.org/trac/mapfish/wiki/PrintModuleDoc#Protocol>`_, to produce PDF outputs of your maps. (see `MapFish PrintModuleDoc <https://trac.mapfish.org/trac/mapfish/wiki/PrintModuleDoc>`_)::
+The Rails MapFish plugin can generate a controller for the `MapFish print protocol <http://trac.mapfish.org/trac/mapfish/wiki/PrintModuleDoc#Protocol>`_, to produce PDF outputs of your maps. (see `MapFish PrintModuleDoc <http://trac.mapfish.org/trac/mapfish/wiki/PrintModuleDoc>`_)::
 
   ./script/generate print_controller Print
 
 You'll need to have `Sun's JRE <http://www.java.com/download/>`_ installed to make this working.
 
 * The print module should be ready & responding to /print/info to get print configuration. 
-  Don't forget to configure the config.yml (see `configuration <https://trac.mapfish.org/trac/mapfish/wiki/PrintModuleServer>`_. For instance, you should at least allow the print service to access the WMS services you're using.
-  The provided print.yml example filw has 3 mandatory fields in the spec: title, comment & mapTitle. 
-  If you're getting errors, check your log file to get debug information (if enabled in your application environment).
+  Don't forget to adapt config/print.yaml (see `configuration <http://trac.mapfish.org/trac/mapfish/wiki/PrintModuleServer>`_. For instance, you should at least allow the print service to access the WMS services you're using.
+  If you're getting errors, check your log file to get debug information.
 
 * Once this is done, you can integrate the `MapFish print widgets <http://www.mapfish.org/svn/mapfish/trunk/MapFish/client/mfbase/mapfish/widgets/print/>`_ into your client application, which give you the ability to output nice customizable PDF with your maps. Examples can be `found here <http://demo.mapfish.org/mapfishsample/trunk/examples/print/>`_.
 
