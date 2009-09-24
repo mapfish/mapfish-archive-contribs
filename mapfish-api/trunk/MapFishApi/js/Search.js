@@ -13,11 +13,13 @@ MapFish.API.Search = OpenLayers.Class({
     recenterFeature: null,
     recenterProtocol: null,
     popupEvents: null,
-    featuresCache: [],
+    featuresCache: null,
 
     initialize: function(config) {
     
         this.api = config.api;
+
+        this.featuresCache = [];
     
         this.markers = this.getMarkersLayer();
         this.api.map.addLayer(this.markers);

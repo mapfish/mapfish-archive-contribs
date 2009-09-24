@@ -7,19 +7,14 @@ Ext.namespace("MapFish");
 
 MapFish.API.ArgParser = OpenLayers.Class(OpenLayers.Control.ArgParser, {
 
-    coordsParams: {lon: 'lon', lat: 'lat'},
+    coordsParams: null,
     api: null,
 
     initialize: function(options) {
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
 
-        if (options && options.api) {
-            this.api = options.api;
-        }
-
-        if (options && options.coordsParams) {
-            this.coordsParams = options.coordsParams;
-        }
+        this.api = options && options.api;
+        this.coordsParams = options && options.coordsParams || {lon: 'lon', lat: 'lat'};
     },
 
     /**

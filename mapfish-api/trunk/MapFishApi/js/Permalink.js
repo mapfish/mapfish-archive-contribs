@@ -8,8 +8,8 @@ Ext.namespace("MapFish");
 
 MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
 
-    coordsParams: {lon: 'lon', lat: 'lat'},
     id: 'mapfish.api.permalink',
+    coordsParams: null,
     api: null,
 
     argParserClass: MapFish.API.ArgParser,
@@ -17,13 +17,8 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
     initialize: function(element, base, options) {
         OpenLayers.Control.Permalink.prototype.initialize.apply(this, arguments);
 
-        if (options && options.api) {
-            this.api = options.api;
-        }
-
-        if (options && options.coordsParams) {
-            this.coordsParams = options.coordsParams;
-        }
+        this.api = options && options.api;
+        this.coordsParams = options && options.coordsParams || {lon: 'lon', lat: 'lat'};
     },
 
     /**

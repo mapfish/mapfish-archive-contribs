@@ -52,7 +52,7 @@ MapFish.API = OpenLayers.Class({
      * Property: debug
      * Flag indicating if debug mode is active.
      */
-    debug: false,
+    debug: null,
 
     /**
      * Property: tree
@@ -64,7 +64,7 @@ MapFish.API = OpenLayers.Class({
      * Property: isMainApp
      * Boolean. Tells if API is used within main application or in external mode.
      */
-    isMainApp: false,
+    isMainApp: null,
 
     /**
      * Property: recenterUrl
@@ -82,7 +82,7 @@ MapFish.API = OpenLayers.Class({
      * Property: layerTreeNodes
      * Array storing checked layers ids according to permalink
      */
-    layerTreeNodes: [],
+    layerTreeNodes: null,
 
     /**
      * Constructor: MapFish.API
@@ -92,13 +92,9 @@ MapFish.API = OpenLayers.Class({
 
         this.baseConfig = config || {};
 
-        if (this.baseConfig.debug) {
-            this.debug = true;
-        }
-
-        if (this.baseConfig.isMainApp) {
-            this.isMainApp = true;
-        }
+        this.debug = Boolean(this.baseConfig.debug);
+        this.isMainApp = Boolean(this.baseConfig.isMainApp);
+        this.layerTreeNodes = [];
 
         // set lang using following order:
         // API instance config > lang param in HTML > extended API class property
