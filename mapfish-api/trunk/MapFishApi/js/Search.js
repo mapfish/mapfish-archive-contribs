@@ -1,3 +1,7 @@
+/**
+ * Search tools
+ */
+
 Ext.namespace("MapFish");
  
 MapFish.API.Search = OpenLayers.Class({
@@ -31,6 +35,9 @@ MapFish.API.Search = OpenLayers.Class({
         });
     },
 
+    /**
+     * Method: getMarkersLayer
+     */
     getMarkersLayer: function() {
         return new OpenLayers.Layer.Vector("Markers", {
             styleMap: new OpenLayers.StyleMap({
@@ -52,6 +59,9 @@ MapFish.API.Search = OpenLayers.Class({
         });
     },
 
+    /**
+     * Method: recenterProtocolCallback
+     */
     recenterProtocolCallback: function(response) {
         var f = response.features[0];
 

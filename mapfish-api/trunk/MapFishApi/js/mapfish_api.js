@@ -1,3 +1,9 @@
+/**
+ * MapFishAPI is a predefined API based on the MapFish framework. It provides
+ * a convenient way to rapidly setup map applications using standardized
+ * classes and public methods.
+ */
+
 Ext.namespace("MapFish");
 
 mapFishApiPool = {

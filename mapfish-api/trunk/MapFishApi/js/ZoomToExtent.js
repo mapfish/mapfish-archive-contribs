@@ -1,3 +1,7 @@
+/**
+ * ZoomToExtent control.
+ */
+
 Ext.namespace("MapFish");
 
 MapFish.API.ZoomToExtent = OpenLayers.Class(OpenLayers.Control, {
@@ -9,6 +13,9 @@ MapFish.API.ZoomToExtent = OpenLayers.Class(OpenLayers.Control, {
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
     },
     
+    /**
+     * Method: trigger
+     */
     trigger: function() {
         if (this.map) {
             if (this.extent) {

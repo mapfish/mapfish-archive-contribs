@@ -1,3 +1,9 @@
+/**
+ * This class is an extension of OpenLayers control Permalink.
+ *
+ * It is used to save the current app context as URL parameters.
+ */
+
 Ext.namespace("MapFish");
 
 MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
@@ -15,6 +21,9 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
         }
     },
 
+    /**
+     * Method: draw
+     */
     draw: function() {
         OpenLayers.Control.prototype.draw.apply(this, arguments);
     

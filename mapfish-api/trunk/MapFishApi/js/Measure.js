@@ -1,3 +1,7 @@
+/**
+ * Distance/area measure tools
+ */
+
 Ext.namespace("MapFish");
 
 MapFish.API.Measure = OpenLayers.Class({
@@ -8,6 +12,9 @@ MapFish.API.Measure = OpenLayers.Class({
         Ext.apply(this, config);
     },
 
+    /**
+     * Method: createLengthMeasureControl
+     */
     createLengthMeasureControl: function() {
         return new OpenLayers.Control.Measure(
             OpenLayers.Handler.Path, {
@@ -26,6 +33,9 @@ MapFish.API.Measure = OpenLayers.Class({
         );
     },
 
+    /**
+     * Method: createAreaMeasureControl
+     */
     createAreaMeasureControl: function() {
         return new OpenLayers.Control.Measure(
             OpenLayers.Handler.Polygon, {

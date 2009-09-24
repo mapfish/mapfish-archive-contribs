@@ -1,3 +1,8 @@
+/**
+ * This class is an extension of OpenLayers control ArgParser.
+ *
+ * It is used to parse arguments from the URL when loading a page.
+ */
 Ext.namespace("MapFish");
 
 MapFish.API.ArgParser = OpenLayers.Class(OpenLayers.Control.ArgParser, {
@@ -12,6 +17,9 @@ MapFish.API.ArgParser = OpenLayers.Class(OpenLayers.Control.ArgParser, {
         }
     },
 
+    /**
+     * Method: setMap
+     */
     setMap: function(map) {
         OpenLayers.Control.prototype.setMap.apply(this, arguments);
 
