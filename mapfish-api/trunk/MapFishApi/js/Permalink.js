@@ -10,11 +10,16 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
 
     coordsParams: {lon: 'lon', lat: 'lat'},
     id: 'mapfish.api.permalink',
+    api: null,
 
     argParserClass: MapFish.API.ArgParser,
 
     initialize: function(element, base, options) {
         OpenLayers.Control.Permalink.prototype.initialize.apply(this, arguments);
+
+        if (options && options.api) {
+            this.api = options.api;
+        }
 
         if (options && options.coordsParams) {
             this.coordsParams = options.coordsParams;
