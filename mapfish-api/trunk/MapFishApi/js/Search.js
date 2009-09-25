@@ -1,11 +1,10 @@
-/**
- * Search tools
- */
-
 Ext.namespace("MapFish");
  
 MapFish.API.Search = OpenLayers.Class({
-
+    /**
+     * Property: api
+     * {MapFish.API} instance
+     */
     api: null,
     markers: null,
     select: null,
@@ -15,6 +14,13 @@ MapFish.API.Search = OpenLayers.Class({
     popupEvents: null,
     featuresCache: null,
 
+    /**
+     * Constructor: MapFish.API.Search(config)
+     * Create a search engine
+     *
+     * Parameters:
+     * config.api - api
+     */
     initialize: function(config) {
     
         this.api = config.api;
@@ -37,9 +43,8 @@ MapFish.API.Search = OpenLayers.Class({
         });
     },
 
-    /**
-     * Method: getMarkersLayer
-     */
+    /* Private methods */
+
     getMarkersLayer: function() {
         return new OpenLayers.Layer.Vector("Markers", {
             styleMap: new OpenLayers.StyleMap({
@@ -61,9 +66,6 @@ MapFish.API.Search = OpenLayers.Class({
         });
     },
 
-    /**
-     * Method: recenterProtocolCallback
-     */
     recenterProtocolCallback: function(response) {
         var f = response.features[0];
 

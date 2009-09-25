@@ -1,15 +1,29 @@
-/**
- * This class is an extension of OpenLayers control ArgParser.
- *
- * It is used to parse arguments from the URL when loading a page.
- */
 Ext.namespace("MapFish");
 
 MapFish.API.ArgParser = OpenLayers.Class(OpenLayers.Control.ArgParser, {
 
+    /**
+     * Property: coordsParams
+     * lon and lat coordinate of map center
+     */
     coordsParams: null,
+
+    /**
+     * Property: api
+     * {MapFish.API} instance
+     */
     api: null,
 
+    /**
+     * Constructor: MapFish.API.ArgParser(options)
+     * This class is an extension of {OpenLayers.Control.ArgParser}
+     * It is used to parse arguments from the URL when loading a page.
+     *
+     * Parameters:
+     * options.api - api
+     * options.coordsParams - coordinate
+     *
+     */
     initialize: function(options) {
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
 
@@ -18,7 +32,11 @@ MapFish.API.ArgParser = OpenLayers.Class(OpenLayers.Control.ArgParser, {
     },
 
     /**
-     * Method: setMap
+     * Method: setMap(map)
+     * Set the map base on the layer nodes, the map center and the zoom level
+     * 
+     * Parameters:
+     * map - map created based on the url paramaters
      */
     setMap: function(map) {
         OpenLayers.Control.prototype.setMap.apply(this, arguments);

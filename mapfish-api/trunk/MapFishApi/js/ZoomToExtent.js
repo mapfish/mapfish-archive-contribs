@@ -1,21 +1,23 @@
-/**
- * ZoomToExtent control.
- */
-
 Ext.namespace("MapFish");
 
 MapFish.API.ZoomToExtent = OpenLayers.Class(OpenLayers.Control, {
 
+    /**
+     * Property: type
+     * {OpenLayers.Control.TYPE_BUTTON}
+     */
     type: OpenLayers.Control.TYPE_BUTTON,
-    
+
+    /**
+     * Constructor: MapFish.API.ZoomToExtent(config)
+     * Create a ZoomToExtent {OpenLayers.Control}
+     *
+     */
     initialize: function(config) {
         Ext.apply(this, config);
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
     },
     
-    /**
-     * Method: trigger
-     */
     trigger: function() {
         if (this.map) {
             if (this.extent) {

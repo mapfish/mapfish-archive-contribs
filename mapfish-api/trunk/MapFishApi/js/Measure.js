@@ -1,20 +1,20 @@
-/**
- * Distance/area measure tools
- */
-
 Ext.namespace("MapFish");
 
 MapFish.API.Measure = OpenLayers.Class({
 
     prevPopup: null,
 
+    /**
+     * Constructor: MapFish.API.Measure()
+     *  Distance/area measure tools
+     */
     initialize: function(config) {
         Ext.apply(this, config);
     },
 
     /**
-     * Method: createLengthMeasureControl
-     */
+     * Method: createLengthMeasureControl()
+    */
     createLengthMeasureControl: function() {
         return new OpenLayers.Control.Measure(
             OpenLayers.Handler.Path, {
@@ -52,6 +52,8 @@ MapFish.API.Measure = OpenLayers.Class({
             }
         );
     },
+
+    /* Private methods */
 
     getStyleMap: function() {
         var sketchSymbolizers = {

@@ -1,9 +1,3 @@
-/**
- * MapFishAPI is a predefined API based on the MapFish framework. It provides
- * a convenient way to rapidly setup map applications using standardized
- * classes and public methods.
- */
-
 Ext.namespace("MapFish");
 
 mapFishApiPool = {
@@ -20,19 +14,19 @@ mapFishApiPool = {
 MapFish.API = OpenLayers.Class({
     /**
      * Property: map
-     * {OpenLayers.Map}
+     * {OpenLayers.Map}: map component
      */
     map: null,
 
     /**
      * Property: drawLayer
-     * {OpenLayers.Layer.Vector}
+     * {OpenLayers.Layer.Vector}: drawing layer over the map
      */
     drawLayer: null,
 
     /**
      * Property: baseConfig
-     * baseConfig
+     * baseConfig of the api
      */
     baseConfig: null,
 
@@ -44,7 +38,7 @@ MapFish.API = OpenLayers.Class({
 
     /**
      * Property: searcher
-     * Instance of Search class
+     * Instance of {MapFish.API.Search} class
      */
     searcher: null,
 
@@ -56,13 +50,13 @@ MapFish.API = OpenLayers.Class({
 
     /**
      * Property: tree
-     * Layer tree
+     * Instance of {mapfish.widgets.LayerTree} class
      */
     tree: null,
 
     /**
      * Property: isMainApp
-     * Boolean. Tells if API is used within main application or in external mode.
+     * Boolean to tell if API is used within main application or in external mode.
      */
     isMainApp: null,
 
@@ -85,13 +79,33 @@ MapFish.API = OpenLayers.Class({
     layerTreeNodes: null,
 
     /**
+     * Property: selectCtrl
+     * Instance of {OpenLayers.Control.SelectFeature}
+     */
+    selectCtrl: null,
+
+    /**
      * Constructor: MapFish.API(config)
      * Create and return an instance of the MapFish API
+     *
+     * MapFishAPI is an API based on the MapFish framework. It provides
+     * a convenient way to rapidly setup map applications using standardized
+     * classes and public methods.
      *
      * Parameters:
      * config.debug - set the debug mode (prod or debug)
      * config.isMainApp - define is the API is an instance of the main application or of a derived application
      * config.lang - set the lang
+     * config.baseUrl - base url of the main application
+     * config.initialExtent - initial extent of the map
+     * config.searchUrl - search url
+     *
+     * Example:
+     * (code)
+     * api = new MapFish.API({
+     *         baseUrl: '<main application url>'
+     * });
+     * (end)
      */
     initialize: function(config) {
         this.apiId = mapFishApiPool.createRef(this);
@@ -130,6 +144,18 @@ MapFish.API = OpenLayers.Class({
      * config.div - div where to place the map
      * config.easting - center of the map, easting value
      * config.northing - center of the map, northing value
+     * config.zoom - zoom level
+     * config.bbox - bbox of the initial extent
+     *
+     * Example:
+     * (code)
+     * api.createMap({
+     *          div: 'mymap1',
+     *          zoom: 14,
+     *          easting: 518752,
+     *          northing: 147276,
+     * });
+     * (end)
      */
     createMap: function(config) {
         config = config || {};
@@ -551,7 +577,7 @@ MapFish.API = OpenLayers.Class({
 
     /*
      * Method: showMarker(options)
-     * Show a marker in the map
+     * Show a marker in the map and associate a popup if an html content is provided
      *
      * Parameters:
      * options.easting - position of the marker, default: map center
@@ -561,6 +587,16 @@ MapFish.API = OpenLayers.Class({
      * options.graphicHeight - height of the height, default: the icon height
      * options.graphicWidth - width of the height, default: the icon width
      * options.fillOpacity - opacity of the marker (from 0 to 1), default: 1
+     * options.html - html content of a popup, default: null
+     *
+     * Example:
+     * (code)
+     * api.showMarker({
+     *          easting: 518752,
+     *          northing: 147276,
+     *          html: "Marker with popup"
+     * });
+     * (end)
      */
     showMarker: function(options) {
         options = options || {};
@@ -572,6 +608,7 @@ MapFish.API = OpenLayers.Class({
         var graphicHeight;
         var graphicWidth;
         var fillOpacity;
+        var html;
 
         // Get the coordinates
         if (options.easting) {
@@ -643,7 +680,11 @@ MapFish.API = OpenLayers.Class({
         } else {
             fillOpacity = 1;
         }
-
+        if (options.html) {
+            html = options.html;
+        } else {
+            html = null;
+        }
         // Set a style for the marker
         var style_mark = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
         style_mark.externalGraphic = this.getIconPath(iconPath);
@@ -655,8 +696,10 @@ MapFish.API = OpenLayers.Class({
         // Create a new feature
         var features = new Array(1);
         features[0] = new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.Point(easting, northing), null, style_mark
-                );
+                new OpenLayers.Geometry.Point(easting, northing),
+        {
+            html: html
+        }, style_mark);
 
 
         this.drawLayer.addFeatures(features);
@@ -664,6 +707,7 @@ MapFish.API = OpenLayers.Class({
         if (recenter == "true") {
             this.map.setCenter(new OpenLayers.LonLat(easting, northing));
         }
+        return features;
     },
     /*
      * Method: showPopup(options)
@@ -678,6 +722,17 @@ MapFish.API = OpenLayers.Class({
      * options.width - width of the popup, default: 200
      * options.collapsible - default: false
      * options.unpinnable - default: true
+     * options.feature - feature associated with the popup
+     *
+     * Example:
+     * (code)
+     * api.showPopup({
+     *          easting: 518752,
+     *          northing: 147276,
+     *          html: "<h1>Example</h1><br>Popup without marker",
+     *          title: "Simple Popup"
+     * });
+     * (end)
      */
     showPopup: function(options) {
         options = options || {};
@@ -690,28 +745,35 @@ MapFish.API = OpenLayers.Class({
         var width;
         var collapsible;
         var unpinnable;
+        var feature;
 
         // Manage options
-        if (options.easting) {
-            easting = options.easting;
+        if (options.feature) {
+            feature = options.feature;
+            html = options.feature.attributes.html;
         } else {
-            easting = this.map.getCenter().lon;
-        }
-        if (options.northing) {
-            northing = options.northing;
-        } else {
-            northing = this.map.getCenter().lat;
+            if (options.easting) {
+                easting = options.easting;
+            } else {
+                easting = this.map.getCenter().lon;
+            }
+            if (options.northing) {
+                northing = options.northing;
+            } else {
+                northing = this.map.getCenter().lat;
+            }
+            if (options.html) {
+                html = options.html;
+            } else {
+                html = null;
+            }
         }
         if (options.title) {
             title = options.title;
         } else {
             title = "";
         }
-        if (options.html) {
-            html = options.html;
-        } else {
-            html = "";
-        }
+
         if (options.recenter) {
             if (options.recenter == "true" || options.recenter == "True" || options.recenter == "TRUE") {
                 recenter = "true";
@@ -740,25 +802,43 @@ MapFish.API = OpenLayers.Class({
             unpinnable = true;
         }
 
-        var popup = new GeoExt.Popup({
-            map: this.map,
-            title: title,
-            lonlat: new OpenLayers.LonLat(easting, northing),
-            width: width,
-            html: html,
-            collapsible: collapsible,
-            unpinnable: unpinnable
-        });
-        popup.show();
+        if (html) {
+            var popup = new GeoExt.Popup({
+                map: this.map,
+                feature: feature,
+                title: title,
+                lonlat: new OpenLayers.LonLat(easting, northing),
+                width: width,
+                html: html,
+                collapsible: collapsible,
+                unpinnable: unpinnable
+            });
+            if (feature) {
+                popup.on({
+                    close: function() {
+                        if (OpenLayers.Util.indexOf(this.drawLayer.selectedFeatures,
+                                feature) > -1) {
+                            this.selectCtrl.unselect(feature);
+                        }
+                    },
+                    scope: this
+                });
+            }
+            popup.show();
+        }
 
         if (recenter == "true") {
             this.map.setCenter(new OpenLayers.LonLat(easting, northing));
         }
     },
 
-    /**
+    /*
+     * Method: updateLayerTreeFromPermalink()
+     * Update the permalink according to the layer tree
+     * 
      * Works only if layertree is a mapfish.widgets.LayerTree and has id attributes
      * for all of its nodes.
+     *
      */
     updateLayerTreeFromPermalink: function() {
         var layertree = this.tree;
@@ -826,6 +906,20 @@ MapFish.API = OpenLayers.Class({
                 displayInLayerSwitcher: false,
                 styleMap: myStyles
             });
+            if (!this.selectCtrl) {
+                this.selectCtrl = new OpenLayers.Control.SelectFeature(this.drawLayer);
+                this.map.addControl(this.selectCtrl);
+                this.selectCtrl.activate();
+                this.drawLayer.events.on({
+                    featureselected: function(e) {
+                        this.showPopup({
+                            feature: e.feature
+                        });
+                        document.body.style.cursor = 'default';
+                    },
+                    scope: this
+                });
+            }
         }
         return this.drawLayer;
     },

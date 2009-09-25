@@ -27,7 +27,7 @@ var indexSectionsWithContent = {
       "W": false,
       "X": false,
       "Y": false,
-      "Z": false
+      "Z": true
       },
    "Functions": {
       "Symbols": false,
@@ -44,7 +44,7 @@ var indexSectionsWithContent = {
       "J": false,
       "K": false,
       "L": true,
-      "M": false,
+      "M": true,
       "N": false,
       "O": false,
       "P": true,
@@ -57,12 +57,12 @@ var indexSectionsWithContent = {
       "W": false,
       "X": false,
       "Y": false,
-      "Z": false
+      "Z": true
       },
    "Files": {
       "Symbols": false,
       "Numbers": false,
-      "A": false,
+      "A": true,
       "B": false,
       "C": false,
       "D": false,
@@ -87,7 +87,7 @@ var indexSectionsWithContent = {
       "W": false,
       "X": false,
       "Y": false,
-      "Z": false
+      "Z": true
       },
    "Classes": {
       "Symbols": false,
@@ -124,7 +124,7 @@ var indexSectionsWithContent = {
       "Numbers": false,
       "A": true,
       "B": true,
-      "C": false,
+      "C": true,
       "D": true,
       "E": false,
       "F": false,

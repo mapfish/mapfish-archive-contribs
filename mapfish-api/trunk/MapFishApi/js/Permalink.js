@@ -1,19 +1,38 @@
-/**
- * This class is an extension of OpenLayers control Permalink.
- *
- * It is used to save the current app context as URL parameters.
- */
-
 Ext.namespace("MapFish");
 
 MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
 
+    /**
+     * Property: id
+     * 'mapfish.api.permalink'
+     */
     id: 'mapfish.api.permalink',
+    /**
+     * Property: coordsParams
+     * lon and lat coordinate of map center
+     */
     coordsParams: null,
+    /**
+     * Property: api
+     * {MapFish.API} instance
+     */
     api: null,
-
+    /**
+     * Property: argParserClass
+     * {MapFish.API.ArgParser}
+     */
     argParserClass: MapFish.API.ArgParser,
 
+    /**
+     * Constructor: MapFish.API.Permalink(element,base,options)
+     * This class is an extension of {OpenLayers.Control.Permalink}.
+     * It is used to save the current app context as URL parameters.
+     *
+     * Parameters:
+     * options.api - api
+     * options.coordsParams - coordinate
+     *
+     */
     initialize: function(element, base, options) {
         OpenLayers.Control.Permalink.prototype.initialize.apply(this, arguments);
 
@@ -22,7 +41,9 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
     },
 
     /**
-     * Method: draw
+     * Method: draw()
+     *
+     * Set the permalink value
      */
     draw: function() {
         OpenLayers.Control.prototype.draw.apply(this, arguments);
@@ -42,7 +63,9 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
     },  
    
     /** 
-     * Method: updateLink 
+     * Method: updateLink()
+     *
+     * Update the permalink
      */
     updateLink: function() {
         var href = this.base;
@@ -56,6 +79,16 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
         }
     },
 
+    /**
+     * Method: createParams(center, zoom, layers)
+     *
+     * Create the permalink parameters
+     *
+     * Parameters:
+     * center - {OpenLayers.LonLat}
+     * zoom - zoom level
+     * layers - array of {OpenLayers.Layer}
+     */
     createParams: function(center, zoom, layers) {
         if (this.map) {
            center = center || this.map.getCenter();
