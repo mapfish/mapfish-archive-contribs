@@ -85,7 +85,13 @@ MapFish.API = OpenLayers.Class({
     layerTreeNodes: null,
 
     /**
-     * Constructor: MapFish.API
+     * Constructor: MapFish.API(config)
+     * Create and return an instance of the MapFish API
+     *
+     * Parameters:
+     * config.debug - set the debug mode (prod or debug)
+     * config.isMainApp - define is the API is an instance of the main application or of a derived application
+     * config.lang - set the lang
      */
     initialize: function(config) {
         this.apiId = mapFishApiPool.createRef(this);
@@ -116,7 +122,14 @@ MapFish.API = OpenLayers.Class({
     },
 
     /**
-     * Method: createMap
+     * Method: createMap(config)
+     * Create and return an {OpenLayers.Map} and place a vector drawing layer {OpenLayers.Layer.Vector} on top
+     *
+     *
+     * Parameters:
+     * config.div - div where to place the map
+     * config.easting - center of the map, easting value
+     * config.northing - center of the map, northing value
      */
     createMap: function(config) {
         config = config || {};
@@ -168,6 +181,17 @@ MapFish.API = OpenLayers.Class({
         return this.map;
     },
 
+    /**
+     * Method: createMapPanel(config)
+     * Create and return an {GeoExt.MapPanel}
+     * and create an {OpenLayers.Map} if it doesn't exist
+     *
+     *
+     * Parameters:
+     * config.mapfinfo - map config object (see createMap(config))
+     * config.showTools - define is the tools are shown in the MapPanel
+     * config.renderTo - renderTo 
+     */
     createMapPanel: function(config) {
         var mapPanel;
         config = config || {};
@@ -205,7 +229,14 @@ MapFish.API = OpenLayers.Class({
     },
 
     /**
-     * Method: createLayerTree
+     * Method: createLayerTree(config)
+     * Create and return an {mapfish.widgets.LayerTree}
+     *
+     * Parameters:
+     * config.div - div where to place the LayerTree
+     * config.layers - layers in the tree
+     * config.title - title of the tree
+     * config.showWmsLegend - define is te WMS legend is shown
      */
     createLayerTree: function(config) {
         config = config || {};
@@ -255,6 +286,14 @@ MapFish.API = OpenLayers.Class({
         return this.tree;
     },
 
+    /**
+     * Method: createToolbar(config)
+     * Create and return an array of functions.
+     * Supported function: 'ZoomToMaxExtent', 'Navigation', 'ZoomBox','LengthMeasure', 'AreaMeasure', 'NavigationHistory','ZoomOut', 'DrawFeature', 'ClearFeatures'
+     *
+     * Parameters:
+     * config.items - array of function to activate. Possible values: 'ZoomToMaxExtent', 'Navigation', 'ZoomBox','LengthMeasure', 'AreaMeasure', 'NavigationHistory','ZoomOut', 'DrawFeature', 'ClearFeatures'  
+     */
     createToolbar: function(config) {
         config = Ext.apply({items: [
             'ZoomToMaxExtent', 'Navigation', 'ZoomBox',
@@ -393,6 +432,14 @@ MapFish.API = OpenLayers.Class({
         return items;
     },
 
+    /**
+     * Method: showFeatureTooltip(config)
+     * Show a feature tooltip. Experimental.
+     *
+     * Parameters:
+     * config.layer - name of the layer
+     * config.id - id of the object
+     */
     showFeatureTooltip: function(config) {
         if (!config.layer || !config.id) return;
 
@@ -404,11 +451,18 @@ MapFish.API = OpenLayers.Class({
     },
 
     /**
+     * Method: recenterOnObjects(layer, ids)
+     * Recenter map based on list of features
+     *
      * This method requires a server-side controller located at baseUrl+recenterUrl
      * returning either a JSONified bbox in AJAX mode
      * or some JS code like:
      * mapFishApiPool.apiRefs[2].recenterOnBboxCb({"rows": [{"bbox": [672518.0, 267450.23999999999, 697695.0, 295935.0]}], "results": 1});
      * in cross-domain mode. See Ext.data.ScriptTagProxy doc.
+     *
+     * Parameters:
+     * layer - name of the layer
+     * ids - array of feature id 
      */
     recenterOnObjects: function(layer, ids) {
         if (this.isMainApp) {
@@ -448,10 +502,17 @@ MapFish.API = OpenLayers.Class({
     },
 
     /**
+     * Method: highlightObjects(layer, ids)
+     * Highlight features in the map
+     *
      * This method requires a server-side controller located at baseUrl+highlightUrl
      * returning some JS code like:
      * mapFishApiPool.apiRefs[2].highlightObjectsCb({"rows": [{"features": {"type": "FeatureCollection", "features": [{"geometry": {"type": "MultiPolygon", "coordinates": [[[[672518.0, 267450.23999999999], [672518.0, 295935.0], [697695.0, 295935.0], [697695.0, 267450.23999999999]]]]}, "type": "Feature", "properties": {}}]}}], "results": 1});
      * See Ext.data.ScriptTagProxy doc.
+     *
+     * Parameters:
+     * layer - name of the layer
+     * ids - array of feature id
      */
     highlightObjects: function(layer, ids) {
         var ds = new Ext.data.Store({
@@ -475,29 +536,31 @@ MapFish.API = OpenLayers.Class({
             }
         });
     },
-
+    /**
+     * Method: showFeatures(layer, ids)
+     * Recenter and highlight a list of features
+     *
+     * Parameters:
+     * layer - name of the layer
+     * ids - array of feature id
+     */
     showFeatures: function(layer, ids) {
         this.recenterOnObjects(layer, ids);
         this.highlightObjects(layer, ids);
     },
 
     /*
-     * Shows a marker
-     * Options:
-     * - easting : position of the marker
-     *     default: map center
-     * - northing : position of the marker
-     *     default: map center
-     * - iconPath : path of a custom icon for the marker (url or relative)
-     *     default: /mfbase/openlayers/img/marker-gold.png
-     * - recenter: define if the map has to recentered at the marker position
-     *     default: false
-     * - graphicHeight: height of the height
-     *     default: the icon height
-     * - graphicWidth: width of the height
-     *     default: the icon width
-     * - fillOpacity: opacity of the marker (from 0 to 1)
-     *     default: 1
+     * Method: showMarker(options)
+     * Show a marker in the map
+     *
+     * Parameters:
+     * options.easting - position of the marker, default: map center
+     * options.northing - position of the marker, default: map center
+     * options.iconPath - path of a custom icon for the marker (url or relative), default: /mfbase/openlayers/img/marker-gold.png
+     * options.recenter - define if the map has to recentered at the marker position, default: false
+     * options.graphicHeight - height of the height, default: the icon height
+     * options.graphicWidth - width of the height, default: the icon width
+     * options.fillOpacity - opacity of the marker (from 0 to 1), default: 1
      */
     showMarker: function(options) {
         options = options || {};
@@ -602,26 +665,19 @@ MapFish.API = OpenLayers.Class({
             this.map.setCenter(new OpenLayers.LonLat(easting, northing));
         }
     },
-
     /*
-     * Shows a GeoExt popup
-     * Options:
-     * - easting : position of the popup
-     *     default: map center
-     * - northing : position of the popup
-     *     default: map center
-     * - title: title of the window
-     *     defaul: ""
-     * - html : html content of the popup
-     *     default: ""
-     * - recenter: define if the map has to recentered at the popup position
-     *     default: false
-     * - width: width of the popup
-     *     default: 200
-     * - collapsible
-     *     default: false
-     * - unpinnable
-     *     default: true
+     * Method: showPopup(options)
+     * Shows a {GeoExt.Popup}
+     *
+     * Parameters:
+     * options.easting - position of the popup - default: map center
+     * options.northing - position of the popup, default: map center
+     * options.title - title of the window, default: ""
+     * options.html - html content of the popup, default: "" . If empty, no popup is shown
+     * options.recenter - define if the map has to recentered at the popup position, default: false
+     * options.width - width of the popup, default: 200
+     * options.collapsible - default: false
+     * options.unpinnable - default: true
      */
     showPopup: function(options) {
         options = options || {};
