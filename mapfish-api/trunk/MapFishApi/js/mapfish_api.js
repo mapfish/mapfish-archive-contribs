@@ -575,7 +575,7 @@ MapFish.API = OpenLayers.Class({
         this.highlightObjects(layer, ids);
     },
 
-    /*
+    /**
      * Method: showMarker(options)
      * Show a marker in the map and associate a popup if an html content is provided
      *
@@ -709,7 +709,8 @@ MapFish.API = OpenLayers.Class({
         }
         return features;
     },
-    /*
+
+    /**
      * Method: showPopup(options)
      * Shows a {GeoExt.Popup}
      *
@@ -832,7 +833,7 @@ MapFish.API = OpenLayers.Class({
         }
     },
 
-    /*
+    /**
      * Method: updateLayerTreeFromPermalink()
      * Update the permalink according to the layer tree
      * 
