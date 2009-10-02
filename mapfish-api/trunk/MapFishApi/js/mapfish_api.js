@@ -85,6 +85,12 @@ MapFish.API = OpenLayers.Class({
     selectCtrl: null,
 
     /**
+     * Property: popup
+     * GeoExt.Popup
+     */
+    popup: null,
+
+    /**
      * Constructor: MapFish.API(config)
      * Create and return an instance of the MapFish API
      *
@@ -803,8 +809,12 @@ MapFish.API = OpenLayers.Class({
             unpinnable = true;
         }
 
+        if (this.popup) {
+            this.popup.close();
+        }
+
         if (html) {
-            var popup = new GeoExt.Popup({
+            this.popup = new GeoExt.Popup({
                 map: this.map,
                 feature: feature,
                 title: title,
@@ -815,7 +825,7 @@ MapFish.API = OpenLayers.Class({
                 unpinnable: unpinnable
             });
             if (feature) {
-                popup.on({
+                this.popup.on({
                     close: function() {
                         if (OpenLayers.Util.indexOf(this.drawLayer.selectedFeatures,
                                 feature) > -1) {
@@ -825,7 +835,7 @@ MapFish.API = OpenLayers.Class({
                     scope: this
                 });
             }
-            popup.show();
+            this.popup.show();
         }
 
         if (recenter == "true") {
