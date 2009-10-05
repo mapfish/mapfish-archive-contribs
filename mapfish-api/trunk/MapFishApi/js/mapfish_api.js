@@ -133,10 +133,9 @@ MapFish.API = OpenLayers.Class({
             // keep missing tiles transparent:
             OpenLayers.Util.onImageLoadError = function() {
                 this.style.display = "none";
-                // set the size to 0x0 because webkit don't take the display into
+                // set the img src because webkit don't take the display into
                 // account and display a "broken image" icon.
-                this.style.width = "0px";
-                this.style.height = "0px";
+                this.src = Ext.BLANK_IMAGE_URL;
             };
         }
     },
