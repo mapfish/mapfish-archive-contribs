@@ -1,6 +1,7 @@
 Ext.namespace("MapFish");
  
 MapFish.API.Search = OpenLayers.Class({
+
     /**
      * Property: api
      * {MapFish.API} instance
@@ -13,6 +14,10 @@ MapFish.API.Search = OpenLayers.Class({
     recenterProtocol: null,
     popupEvents: null,
     featuresCache: null,
+    searcher: null,
+    queryProtocol: null,
+    eventProtocol: null,
+    filterProtocol: null,
 
     /**
      * Constructor: MapFish.API.Search(config)
@@ -27,20 +32,65 @@ MapFish.API.Search = OpenLayers.Class({
 
         this.featuresCache = [];
     
-        this.markers = this.getMarkersLayer();
-        this.api.map.addLayer(this.markers);
+        if (!config.disableSearch) {
+            this.markers = this.getMarkersLayer();
+            this.api.map.addLayer(this.markers);
+    
+            this.select = new OpenLayers.Control.SelectFeature(
+                this.markers, {hover: true, multiple: false}
+            );
+            this.api.map.addControl(this.select);
+            this.select.activate();
+    
+            this.recenterProtocol = new mapfish.Protocol.MapFish({
+                url: this.api.baseConfig.recenterUrl,
+                callback: this.recenterProtocolCallback,
+                scope: this
+            });
+        }
+        
+        if (!config.disableQuery) { 
+            this.queryProtocol = new mapfish.Protocol.MapFish({
+                url: this.api.baseConfig.queryUrl,
+                format: new OpenLayers.Format.JSON()
+            });
+            
+            this.eventProtocol = new mapfish.Protocol.TriggerEventDecorator({
+                protocol: this.queryProtocol
+            });
+            
+            this.filterProtocol = new mapfish.Protocol.MergeFilterDecorator({
+                protocol: this.eventProtocol
+            }); 
+            this.filterProtocol.register({
+                getFilter: function() {
+                    var layers = [];
+                    var olLayers = this.api.map.getLayersByName({test: function(str) {return true;}});
+                    for (l in olLayers) {
+                        if (olLayers[l].params &&
+                            olLayers[l].params.LAYERS &&
+                            olLayers[l].params.LAYERS.length > 0) {
+                            layers = layers.concat(olLayers[l].params.LAYERS);
+                        }
+                    }
+                    return {layers: layers};
+                }.createDelegate(this)
+            });
+            
+            this.searcher = new mapfish.Searcher.Map({
+                mode: mapfish.Searcher.Map.CLICK,
+                searchTolerance: 10,
+                protocol: this.filterProtocol
+            });
+            
+            this.eventProtocol.events.on({
+                crudfinished: this.queryProtocolCallback,
+                scope: this
+            });
 
-        this.select = new OpenLayers.Control.SelectFeature(
-            this.markers, {hover: true}
-        );
-        this.api.map.addControl(this.select);
-        this.select.activate();
-
-        this.recenterProtocol = new mapfish.Protocol.MapFish({
-            url: this.api.baseConfig.recenterUrl,
-            callback: this.recenterProtocolCallback,
-            scope: this
-        });
+            this.api.map.addControl(this.searcher);
+            this.searcher.activate(); 
+        }
     },
 
     /* Private methods */
@@ -79,7 +129,7 @@ MapFish.API.Search = OpenLayers.Class({
 
         this.hidePopup();
         this.api.map.zoomToExtent(f.bounds);
-        this.showPopup(f.data.name, f.data.content);
+        this.showPopup(f.data.name, f.data.content, this.recenterFeature);
 
         // Finished
         this.recenterFeature = null;
@@ -108,6 +158,14 @@ MapFish.API.Search = OpenLayers.Class({
         }
     },
 
+    queryProtocolCallback: function(response) {
+        
+        var lonlat = this.searcher.popupLonLat;
+        var feature = new OpenLayers.Feature.Vector(new
+                          OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+        this.showPopup(response.title, response.features.content, feature);
+    },
+    
     hidePopup: function() {
 
         if (this.popup) {
@@ -115,15 +173,15 @@ MapFish.API.Search = OpenLayers.Class({
         }
     },
 
-    showPopup: function(title, html) {
+    showPopup: function(title, html, feature) {
 
-        if (this.recenterFeature) {
+        if (feature) {
 
             this.hidePopup();
             this.popup = new GeoExt.Popup({
                 map: this.api.map,
                 title: title,
-                feature: this.recenterFeature,
+                feature: feature,
                 width: 250,
                 html: html,
                 unpinnable: false,
