@@ -351,6 +351,7 @@ MapFish.API = OpenLayers.Class({
                 toggleGroup: 'navigation',
                 allowDepress: false,
                 pressed: true,
+                id: 'navigationButton',
                 //text: 'nav',
                 iconCls: 'pan'
             }, config.actions));
