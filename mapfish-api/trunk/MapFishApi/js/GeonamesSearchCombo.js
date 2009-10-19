@@ -19,6 +19,8 @@ MapFish.API.GeoNamesSearchCombo = Ext.extend(Ext.form.ComboBox, {
 
     forceSelection: true,
 
+    queryParam: 'name_startsWith',
+
     tpl: '<tpl for="."><div class="x-combo-list-item"><h1>{name}<br></h1>{fcodeName} - {countryName}</div></tpl>',
 
 
@@ -59,10 +61,6 @@ MapFish.API.GeoNamesSearchCombo = Ext.extend(Ext.form.ComboBox, {
                 ]  })
         });
         this.store.load();
-
-        this.store.on('beforeload', function() {
-            this.store.baseParams.q = Ext.getCmp('GeonamesCombo').getValue();
-        }, this);
 
         this.on("select", function(combo, record, index) {
             var position = new OpenLayers.LonLat(record.data.lng, record.data.lat);
