@@ -71,3 +71,11 @@
 #linkPanel .x-panel-body {
    border-style:none;
 }
+
+#apiPanel .x-panel-body {
+   border-style:none;
+}
+
+#apiPanel .x-form-field {
+    font-size:10px;
+}

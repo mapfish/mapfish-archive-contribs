@@ -213,7 +213,69 @@ MapFish.API = OpenLayers.Class({
     },
 
     createPermalinkFormPanel: function() {
-       return new MapFish.API.PermalinkFormPanel();
+        return new MapFish.API.PermalinkFormPanel();
+    },
+
+    createApiFormPanel: function() {
+        this.map.events.on({
+            'moveend': this.updateApi,
+            'changelayer': this.updateApi,
+            'changebaselayer': this.updateApi,
+            scope: this
+        });
+        return new MapFish.API.ApiFormPanel();
+    },
+
+    updateApi: function() {
+        var apiText = '<html xmlns=\"http://www.w3.org/1999/xhtml\">';
+        apiText = apiText + "\n";
+        apiText = apiText + "  <head>";
+        apiText = apiText + "\n";
+        apiText = apiText + "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf8\" />";
+        apiText = apiText + "\n";
+        apiText = apiText + "    <meta name=\"content-language\" content=\"en\" />";
+        apiText = apiText + "\n";
+        apiText = apiText + "    <title>API</title>";
+
+        s = document.styleSheets;
+        for (i = 0; i < s.length; i++) {
+            apiText = apiText + "\n";
+            apiText = apiText + "    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + s[i].href + "\"/>";
+        }
+
+        var scripts = document.getElementsByTagName('script');
+        for (i = 0; i < scripts.length; i++) {
+            var script = scripts[i];
+            if (script.src.indexOf('init.js') < 0 && script.src.indexOf('ws.geonames.org') < 0  ) {
+                apiText = apiText + "\n";
+                apiText = apiText + "    <script type=\"text/javascript\" src=\"" + script.src + "\"></script>";
+            }
+        }
+        apiText = apiText + "\n";
+        apiText = apiText + "<script type=\"text/javascript\">\n";
+        apiText = apiText + "   Ext.onReady(function() {\n";
+        apiText = apiText + "      geo = new mymapfish.API();\n";
+        apiText = apiText + "      geo.createMap({\n";
+        apiText = apiText + "         div: 'mymap1',\n";
+        apiText = apiText + "         zoom: "+this.map.zoom+",\n",
+        apiText = apiText + "         easting: "+this.map.getCenter().lon+",\n",
+        apiText = apiText + "         northing: "+this.map.getCenter().lat+"\n",
+        apiText = apiText + "      });\n";
+        apiText = apiText + "    });\n";
+        apiText = apiText + "</script>\n";
+        apiText = apiText + "  </head>";
+        apiText = apiText + "\n";
+        apiText = apiText + "    <body>";
+        apiText = apiText + "\n";
+        apiText = apiText + "       <div id=\"mymap1\" style=\"width:800px;height:600px;border:1px solid black;\"></div>";
+        apiText = apiText + "\n";
+        apiText = apiText + "    </body>";
+        apiText = apiText + "\n";
+        apiText = apiText + "</html>";
+        apiText = apiText + "\n";
+
+
+        Ext.getCmp('apitext').setValue(apiText);
     },
 
     /**
@@ -225,7 +287,7 @@ MapFish.API = OpenLayers.Class({
      * Parameters:
      * config.mapfinfo - map config object (see createMap(config))
      * config.showTools - define is the tools are shown in the MapPanel
-     * config.renderTo - renderTo 
+     * config.renderTo - renderTo
      */
     createMapPanel: function(config) {
         var mapPanel;
@@ -327,7 +389,7 @@ MapFish.API = OpenLayers.Class({
      * Supported function: 'ZoomToMaxExtent', 'Navigation', 'ZoomBox','LengthMeasure', 'AreaMeasure', 'NavigationHistory','ZoomOut', 'DrawFeature', 'ClearFeatures'
      *
      * Parameters:
-     * config.items - array of function to activate. Possible values: 'ZoomToMaxExtent', 'Navigation', 'ZoomBox','LengthMeasure', 'AreaMeasure', 'NavigationHistory','ZoomOut', 'DrawFeature', 'ClearFeatures'  
+     * config.items - array of function to activate. Possible values: 'ZoomToMaxExtent', 'Navigation', 'ZoomBox','LengthMeasure', 'AreaMeasure', 'NavigationHistory','ZoomOut', 'DrawFeature', 'ClearFeatures'
      */
     createToolbar: function(config) {
         config = Ext.apply({items: [
@@ -498,7 +560,7 @@ MapFish.API = OpenLayers.Class({
      *
      * Parameters:
      * layer - name of the layer
-     * ids - array of feature id 
+     * ids - array of feature id
      */
     recenterOnObjects: function(layer, ids) {
         if (this.isMainApp) {
@@ -850,7 +912,7 @@ MapFish.API = OpenLayers.Class({
     /**
      * Method: updateLayerTreeFromPermalink()
      * Update the permalink according to the layer tree
-     * 
+     *
      * Works only if layertree is a mapfish.widgets.LayerTree and has id attributes
      * for all of its nodes.
      *
