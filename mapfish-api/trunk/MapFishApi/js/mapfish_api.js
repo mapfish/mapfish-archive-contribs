@@ -212,6 +212,10 @@ MapFish.API = OpenLayers.Class({
         return this.map;
     },
 
+    createPermalinkFormPanel: function() {
+       return new MapFish.API.PermalinkFormPanel();
+    },
+
     /**
      * Method: createMapPanel(config)
      * Create and return an {GeoExt.MapPanel}

@@ -67,3 +67,7 @@
     height:20px !important;
     width:20px !important;
 }
+
+#linkPanel .x-panel-body {
+   border-style:none;
+}
