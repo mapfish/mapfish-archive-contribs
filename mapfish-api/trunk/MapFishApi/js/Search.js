@@ -160,10 +160,12 @@ MapFish.API.Search = OpenLayers.Class({
 
     queryProtocolCallback: function(response) {
         
-        var lonlat = this.searcher.popupLonLat;
-        var feature = new OpenLayers.Feature.Vector(new
-                          OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-        this.showPopup(response.title, response.features.content, feature);
+        if (response.features.content) {
+            var lonlat = this.searcher.popupLonLat;
+            var feature = new OpenLayers.Feature.Vector(new
+                              OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+            this.showPopup(response.title, response.features.content, feature);
+        }
     },
     
     hidePopup: function() {
