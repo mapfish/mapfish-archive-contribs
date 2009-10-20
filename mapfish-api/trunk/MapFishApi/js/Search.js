@@ -164,7 +164,7 @@ MapFish.API.Search = OpenLayers.Class({
             var lonlat = this.searcher.popupLonLat;
             var feature = new OpenLayers.Feature.Vector(new
                               OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-            this.showPopup(response.title, response.features.content, feature);
+            this.showPopup(response.features.title, response.features.content, feature);
         }
     },
     
