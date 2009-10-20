@@ -217,65 +217,62 @@ MapFish.API = OpenLayers.Class({
     },
 
     createApiFormPanel: function() {
-        this.map.events.on({
-            'moveend': this.updateApi,
-            'changelayer': this.updateApi,
-            'changebaselayer': this.updateApi,
-            scope: this
-        });
-        return new MapFish.API.ApiFormPanel();
+        return new MapFish.API.ApiFormPanel(this);
     },
 
-    updateApi: function() {
+    createApiCode: function(html) {
+        var separator = "\n";
+        if (html) {
+           separator = "<br>";
+        }
         var apiText = '<html xmlns=\"http://www.w3.org/1999/xhtml\">';
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
         apiText = apiText + "  <head>";
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
         apiText = apiText + "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf8\" />";
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
         apiText = apiText + "    <meta name=\"content-language\" content=\"en\" />";
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
         apiText = apiText + "    <title>API</title>";
 
         s = document.styleSheets;
         for (i = 0; i < s.length; i++) {
-            apiText = apiText + "\n";
+            apiText = apiText + separator;
             apiText = apiText + "    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + s[i].href + "\"/>";
         }
 
         var scripts = document.getElementsByTagName('script');
         for (i = 0; i < scripts.length; i++) {
             var script = scripts[i];
-            if (script.src.indexOf('init.js') < 0 && script.src.indexOf('ws.geonames.org') < 0  ) {
-                apiText = apiText + "\n";
+            if (script.src.indexOf('init.js') < 0 && script.src.indexOf('ws.geonames.org') < 0) {
+                apiText = apiText + separator;
                 apiText = apiText + "    <script type=\"text/javascript\" src=\"" + script.src + "\"></script>";
             }
         }
-        apiText = apiText + "\n";
-        apiText = apiText + "<script type=\"text/javascript\">\n";
-        apiText = apiText + "   Ext.onReady(function() {\n";
-        apiText = apiText + "      geo = new mymapfish.API();\n";
-        apiText = apiText + "      geo.createMap({\n";
-        apiText = apiText + "         div: 'mymap1',\n";
-        apiText = apiText + "         zoom: "+this.map.zoom+",\n",
-        apiText = apiText + "         easting: "+this.map.getCenter().lon+",\n",
-        apiText = apiText + "         northing: "+this.map.getCenter().lat+"\n",
-        apiText = apiText + "      });\n";
-        apiText = apiText + "    });\n";
-        apiText = apiText + "</script>\n";
+        apiText = apiText + separator;
+        apiText = apiText + "  <script type=\"text/javascript\">" + separator;
+        apiText = apiText + "    Ext.onReady(function() {" + separator;
+        apiText = apiText + "      geo = new mymapfish.API();" + separator;
+        apiText = apiText + "      geo.createMap({" + separator;
+        apiText = apiText + "         div: 'mymap1'," + separator;
+        apiText = apiText + "         zoom: " + this.map.zoom + "," + separator,
+        apiText = apiText + "         easting: " + this.map.getCenter().lon + "," + separator,
+        apiText = apiText + "         northing: " + this.map.getCenter().lat + separator,
+        apiText = apiText + "      });" + separator;
+        apiText = apiText + "    });" + separator;
+        apiText = apiText + "  </script>" + separator;
         apiText = apiText + "  </head>";
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
         apiText = apiText + "    <body>";
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
         apiText = apiText + "       <div id=\"mymap1\" style=\"width:800px;height:600px;border:1px solid black;\"></div>";
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
         apiText = apiText + "    </body>";
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
         apiText = apiText + "</html>";
-        apiText = apiText + "\n";
+        apiText = apiText + separator;
+        return apiText;
 
-
-        Ext.getCmp('apitext').setValue(apiText);
     },
 
     /**
