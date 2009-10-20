@@ -159,8 +159,8 @@ MapFish.API.Search = OpenLayers.Class({
     },
 
     queryProtocolCallback: function(response) {
-        
-        if (response.features.content) {
+
+        if (response.features) {
             var lonlat = this.searcher.popupLonLat;
             var feature = new OpenLayers.Feature.Vector(new
                               OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
