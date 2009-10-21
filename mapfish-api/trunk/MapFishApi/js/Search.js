@@ -164,7 +164,7 @@ MapFish.API.Search = OpenLayers.Class({
             var lonlat = this.searcher.popupLonLat;
             var feature = new OpenLayers.Feature.Vector(new
                               OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-            this.showPopup(response.features.title, response.features.content, feature);
+            this.showPopup(response.features.title, response.features.content, feature, 400);
         }
     },
     
@@ -175,8 +175,11 @@ MapFish.API.Search = OpenLayers.Class({
         }
     },
 
-    showPopup: function(title, html, feature) {
+    showPopup: function(title, html, feature, width) {
 
+        if (typeof(width) == 'undefined') {
+            width = 250;
+        }
         if (feature) {
 
             this.hidePopup();
@@ -184,7 +187,7 @@ MapFish.API.Search = OpenLayers.Class({
                 map: this.api.map,
                 title: title,
                 feature: feature,
-                width: 250,
+                width: width,
                 html: html,
                 unpinnable: false,
                 border: false
