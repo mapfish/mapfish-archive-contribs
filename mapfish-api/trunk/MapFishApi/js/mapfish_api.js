@@ -237,6 +237,10 @@ MapFish.API = OpenLayers.Class({
         return new MapFish.API.ApiFormPanel(this);
     },
 
+    createAddWmsLayerFormPanel: function() {
+        return new MapFish.API.AddWmsLayerFormPanel(this);
+    },
+
     getReturnLine: function(html) {
         var separator = "\n";
         if (html) {
