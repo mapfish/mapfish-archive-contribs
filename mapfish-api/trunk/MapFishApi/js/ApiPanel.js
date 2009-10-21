@@ -26,18 +26,51 @@ String.prototype.replaceAll = function(
 MapFish.API.ApiFormPanel = Ext.extend(Ext.Panel, {
     id: 'apiPanel',
     api: null,
+    layout: 'form',
     constructor: function(config) {
         this.api = config;
         this.items = [
             {
+                xtype: 'label',
+                text: 'API configuration',
+                cls: 'labelApiFormPanel'
+            },
+            {
+                xtype: 'checkbox',
+                id: 'cbMarkerApiFormPanel',
+                hideLabel: true,
+                boxLabel: 'Show marker in the middle of the map',
+            },
+            {
+                xtype: 'checkbox',
+                id: 'cbPopupApiFormPanel',
+                hideLabel: true,
+                boxLabel: 'Show popup in the middle of the map',
+                handler: function(cb,checked) {
+                    if (checked) {
+                        Ext.getCmp('cbPopupContentApiFormPanel').enable();
+                    } else {
+                       Ext.getCmp('cbPopupContentApiFormPanel').disable(); 
+                    }
+                }
+            },
+            {
+                xtype: 'textfield',
+                id: 'cbPopupContentApiFormPanel',
+                fieldLabel: 'Html content: ',
+                width: 250,
+                disabled: true
+            },
+            {
                 xtype: 'button',
-                text: 'Show API code',
+                text: 'Generate API code',
+                cls: 'buttonApiFormPanel',
                 width: 200,
                 handler: function() {
                     var code = this.api.createApiCode(true).replaceAll('<br>', 'blablabla');
                     var code = code.replaceAll('<', '&#60;');
                     var code = code.replaceAll('>', '&#62;');
-                    var code = code.replaceAll(' ','&nbsp;');
+                    var code = code.replaceAll(' ', '&nbsp;');
                     var code = code.replaceAll('blablabla', '<br>');
                     var win = new Ext.Window({
                         width:800,

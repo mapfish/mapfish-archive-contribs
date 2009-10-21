@@ -91,6 +91,12 @@ MapFish.API = OpenLayers.Class({
     popup: null,
 
     /**
+     * Property: apiName
+     * Name of the API
+     */
+    apiName: 'MapFish',
+
+    /**
      * Constructor: MapFish.API(config)
      * Create and return an instance of the MapFish API
      *
@@ -212,6 +218,17 @@ MapFish.API = OpenLayers.Class({
         return this.map;
     },
 
+    getCreateMapDescription: function(html) {
+        var separator = this.getReturnLine(html);
+        var comment = "      // createMap config parameters" + separator;
+        comment = comment + "      //  div - div where to place the map" + separator;
+        comment = comment + "      //  easting - center of the map, easting value" + separator;
+        comment = comment + "      //  northing - center of the map, northing value" + separator;
+        comment = comment + "      //  zoom - zoom level" + separator;
+        comment = comment + "      //  bbox - bbox of the initial extent" + separator;
+        return comment;
+    },
+
     createPermalinkFormPanel: function() {
         return new MapFish.API.PermalinkFormPanel();
     },
@@ -220,11 +237,15 @@ MapFish.API = OpenLayers.Class({
         return new MapFish.API.ApiFormPanel(this);
     },
 
-    createApiCode: function(html) {
+    getReturnLine: function(html) {
         var separator = "\n";
         if (html) {
-           separator = "<br>";
+            separator = "<br>";
         }
+        return separator;
+    },
+    createApiCode: function(html) {
+        var separator = this.getReturnLine(html);
         var apiText = '<html xmlns=\"http://www.w3.org/1999/xhtml\">';
         apiText = apiText + separator;
         apiText = apiText + "  <head>";
@@ -252,13 +273,30 @@ MapFish.API = OpenLayers.Class({
         apiText = apiText + separator;
         apiText = apiText + "  <script type=\"text/javascript\">" + separator;
         apiText = apiText + "    Ext.onReady(function() {" + separator;
-        apiText = apiText + "      geo = new mymapfish.API();" + separator;
+        apiText = apiText + "      geo = new " + this.apiName + ".API();" + separator;
+        apiText = apiText + this.getCreateMapDescription(html);
         apiText = apiText + "      geo.createMap({" + separator;
         apiText = apiText + "         div: 'mymap1'," + separator;
         apiText = apiText + "         zoom: " + this.map.zoom + "," + separator,
-        apiText = apiText + "         easting: " + this.map.getCenter().lon + "," + separator,
-        apiText = apiText + "         northing: " + this.map.getCenter().lat + separator,
-        apiText = apiText + "      });" + separator;
+                apiText = apiText + "         easting: " + this.map.getCenter().lon + "," + separator,
+                apiText = apiText + "         northing: " + this.map.getCenter().lat + separator,
+                apiText = apiText + "      });" + separator;
+        var cbShowMarker = Ext.getCmp('cbMarkerApiFormPanel');
+        if (cbShowMarker) {
+            if (cbShowMarker.getValue()) {
+                apiText = apiText + this.getShowMarkerDescription(html);
+                apiText = apiText + "      geo.showMarker();" + separator;
+            }
+        }
+        var cbShowPopup = Ext.getCmp('cbPopupApiFormPanel');
+        if (cbShowPopup) {
+            if (cbShowPopup.getValue()) {
+                apiText = apiText + this.getShowPopupDescription(html);
+                apiText = apiText + "      geo.showPopup({" + separator;
+                apiText = apiText + "         html: '" + Ext.getCmp('cbPopupContentApiFormPanel').getValue() + "'" + separator;
+                apiText = apiText + "      });" + separator;
+            }
+        }
         apiText = apiText + "    });" + separator;
         apiText = apiText + "  </script>" + separator;
         apiText = apiText + "  </head>";
@@ -779,6 +817,19 @@ MapFish.API = OpenLayers.Class({
         return features;
     },
 
+    getShowMarkerDescription: function(html) {
+        var separator = this.getReturnLine(html);
+        var comment = "      // showMarker config parameters" + separator;
+        comment = comment + "      //  easting - position of the marker, default: map center" + separator;
+        comment = comment + "      //  northing - position of the marker, default: map center" + separator;
+        comment = comment + "      //  iconPath - path of a custom icon for the marker (url or relative), default: /mfbase/openlayers/img/marker-gold.png" + separator;
+        comment = comment + "      //  recenter - define if the map has to recentered at the marker position, default: false" + separator;
+        comment = comment + "      //  graphicHeight - height of the height, default: the icon height" + separator;
+        comment = comment + "      //  graphicWidth - width of the height, default: the icon width" + separator;
+        comment = comment + "      //  fillOpacity - opacity of the marker (from 0 to 1), default: 1" + separator;
+        comment = comment + "      //  html - html content of a popup, default: null" + separator;
+        return comment;
+    },
     /**
      * Method: showPopup(options)
      * Shows a {GeoExt.Popup}
@@ -904,6 +955,21 @@ MapFish.API = OpenLayers.Class({
         if (recenter == "true") {
             this.map.setCenter(new OpenLayers.LonLat(easting, northing));
         }
+    },
+
+    getShowPopupDescription: function(html) {
+        var separator = this.getReturnLine(html);
+        var comment = "      // showPopup config parameters" + separator;
+        comment = comment + "      //  easting - position of the popup - default: map center" + separator;
+        comment = comment + "      //  northing - position of the popup, default: map center" + separator;
+        comment = comment + "      //  title - title of the window, default: " + separator;
+        comment = comment + "      //  html - html content of the popup, default: '' . If empty, no popup is shown" + separator;
+        comment = comment + "      //  recenter - define if the map has to recentered at the popup position, default: false" + separator;
+        comment = comment + "      //  width - width of the popup, default: 200" + separator;
+        comment = comment + "      //  collapsible - default: false" + separator;
+        comment = comment + "      //  unpinnable - default: true" + separator;
+        comment = comment + "      //  feature - feature associated with the popup" + separator;
+        return comment;
     },
 
     /**

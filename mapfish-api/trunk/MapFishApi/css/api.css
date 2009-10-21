@@ -76,6 +76,12 @@
    border-style:none;
 }
 
-#apiPanel .x-form-field {
-    font-size:10px;
+.labelApiFormPanel {
+   font-weight: bold;
+}
+
+.buttonApiFormPanel {
+   padding-left:280px;
+   padding-top:20px;
+   width:auto;
 }
