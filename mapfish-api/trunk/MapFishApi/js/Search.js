@@ -96,7 +96,7 @@ MapFish.API.Search = OpenLayers.Class({
     /* Private methods */
 
     getMarkersLayer: function() {
-        return new OpenLayers.Layer.Vector("Markers", {
+        return new OpenLayers.Layer.Vector(OpenLayers.Util.createUniqueID(), {
             styleMap: new OpenLayers.StyleMap({
                 "default": {
                     pointRadius: 11, 
@@ -196,5 +196,16 @@ MapFish.API.Search = OpenLayers.Class({
 
             this.popup.show();
         }
-    }
+    },
+    
+    hideLayer: function() {
+        
+        this.hidePopup();
+        this.markers.destroyFeatures();
+        this.markers.setVisibility(false);
+    },
+    
+    showLayer: function() {
+        this.markers.setVisibility(true);
+    }    
 });
