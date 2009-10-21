@@ -27,6 +27,7 @@ MapFish.API.ApiFormPanel = Ext.extend(Ext.Panel, {
     id: 'apiPanel',
     api: null,
     layout: 'form',
+
     constructor: function(config) {
         this.api = config;
         this.items = [
@@ -39,7 +40,7 @@ MapFish.API.ApiFormPanel = Ext.extend(Ext.Panel, {
                 xtype: 'checkbox',
                 id: 'cbMarkerApiFormPanel',
                 hideLabel: true,
-                boxLabel: 'Show marker in the middle of the map',
+                boxLabel: 'Show marker in the middle of the map'
             },
             {
                 xtype: 'checkbox',
@@ -86,5 +87,4 @@ MapFish.API.ApiFormPanel = Ext.extend(Ext.Panel, {
         ];
         MapFish.API.ApiFormPanel.superclass.constructor.call(this, config);
     }
-
 });
