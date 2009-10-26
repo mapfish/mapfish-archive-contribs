@@ -97,6 +97,12 @@ MapFish.API = OpenLayers.Class({
     apiName: 'MapFish',
 
     /**
+     * Property: tools
+     * list of enabled tools's actions
+     */
+    tools: null,
+
+    /**
      * Constructor: MapFish.API(config)
      * Create and return an instance of the MapFish API
      *
@@ -430,143 +436,148 @@ MapFish.API = OpenLayers.Class({
      * Parameters:
      * config.items - array of function to activate. Possible values: 'ZoomToMaxExtent', 'Navigation', 'ZoomBox','LengthMeasure', 'AreaMeasure', 'NavigationHistory','ZoomOut', 'DrawFeature', 'ClearFeatures'
      */
+
     createToolbar: function(config) {
         config = Ext.apply({items: [
             'ZoomToMaxExtent', 'Navigation', 'ZoomBox',
             'LengthMeasure', 'AreaMeasure', 'NavigationHistory'/*,
              'ZoomOut', 'DrawFeature', 'ClearFeatures' */
         ]}, config);
-        var items = [], action;
-
-        // FIXME: be gentle with memory allocation
-        if (config.items.indexOf('ZoomToMaxExtent') != -1) {
-            action = new GeoExt.Action(Ext.apply({
-                map: this.map,
-                control: new MapFish.API.ZoomToExtent(config.controls),
-                iconCls: 'zoomfull'
-                //toggleGroup: 'navigation',
-                //allowDepress: false,
-                //text: "max extent"
-            }, config.actions));
-            items.push(action);
+        this.tools = [];
+        
+        // init all enabled tools
+        for (var i = 0; i < config.items.length; i++) {
+          this['init' + config.items[i]](config);
         }
 
-        if (config.items.indexOf('Navigation') != -1) {
-            action = new Ext.Button(Ext.apply({
+        return this.tools;
+    },
+    
+    initZoomToMaxExtent: function (config) {
+        var action = new GeoExt.Action(Ext.apply({
+            map: this.map,
+            control: new MapFish.API.ZoomToExtent(config.controls),
+            iconCls: 'zoomfull'
+            //toggleGroup: 'navigation',
+            //allowDepress: false,
+            //text: "max extent"
+        }, config.actions));
+        this.tools.push(action);
+    },
+
+    initNavigation: function (config) {
+        var action = new Ext.Button(Ext.apply({
+            toggleGroup: 'navigation',
+            allowDepress: false,
+            pressed: true,
+            id: 'navigationButton',
+            //text: 'nav',
+            iconCls: 'pan'
+        }, config.actions));
+        this.tools.push(action);
+    },
+
+    initZoomBox: function (config) {
+        var action = new GeoExt.Action(Ext.apply({
+            map: this.map,
+            control: new OpenLayers.Control.ZoomBox(config.controls),
+            toggleGroup: 'navigation',
+            allowDepress: false,
+            //text: 'zoom box',
+            iconCls: 'zoomin'
+        }, config.actions));
+        this.tools.push(action);
+    },
+
+    initZoomOut: function (config) {
+        var action = new GeoExt.Action(Ext.apply({
+            map: this.map,
+            control: new OpenLayers.Control.ZoomBox(Ext.apply({out: true}, config.controls)),
+            toggleGroup: 'navigation',
+            allowDepress: false,
+            //text: 'zoom box',
+            iconCls: 'zoomout'
+        }, config.actions));
+        this.tools.push(action);
+    },
+
+    initLengthMeasure: function (config) {
+        var measure = new MapFish.API.Measure(config.controls);
+        var action = new GeoExt.Action(Ext.apply({
+            map: this.map,
+            control: measure.createLengthMeasureControl(),
+            toggleGroup: 'navigation',
+            allowDepress: false,
+            //text: 'length',
+            iconCls: 'measureLength'
+        }, config.actions));
+        this.tools.push(action);
+    },
+
+    initAreaMeasure: function (config) {
+        var measure = new MapFish.API.Measure(config.controls);
+        var action = new GeoExt.Action(Ext.apply({
+            map: this.map,
+            control: measure.createAreaMeasureControl(),
+            toggleGroup: 'navigation',
+            allowDepress: false,
+            //text: 'area',
+            iconCls: 'measureArea'
+        }, config.actions));
+        this.tools.push(action);
+    },
+
+    initNavigationHistory: function (config) {
+        var history = new OpenLayers.Control.NavigationHistory(config.controls);
+        history.activate();
+        this.map.addControl(history);
+
+        var action = new GeoExt.Action(Ext.apply({
+            tooltip: OpenLayers.i18n("previous"),
+            control: history.previous,
+            iconCls: 'previous',
+            disabled: true
+        }, config.actions));
+        this.tools.push(action);
+
+        action = new GeoExt.Action(Ext.apply({
+            tooltip: OpenLayers.i18n("next"),
+            control: history.next,
+            iconCls: 'next',
+            disabled: true
+        }, config.actions));
+        this.tools.push(action);
+    },
+
+    initDrawFeature: function (config) {
+        var handlers = mapfish.Util.fixArray(
+                config.drawHandlers || ['Point', 'Path', 'Polygon']);
+        for (var i = 0; i < handlers.length; i++) {
+            var control = new OpenLayers.Control.DrawFeature(
+                    this.getDrawingLayer(),
+                    OpenLayers.Handler[handlers[i]],
+                    config.controls);
+            this.map.addControl(control);
+            var action = new GeoExt.Action(Ext.apply({
+                map: this.map,
+                control: control,
                 toggleGroup: 'navigation',
                 allowDepress: false,
-                pressed: true,
-                id: 'navigationButton',
-                //text: 'nav',
-                iconCls: 'pan'
+                iconCls: 'draw' + handlers[i]
             }, config.actions));
-            items.push(action);
+            this.tools.push(action);
         }
+    },
 
-        if (config.items.indexOf('ZoomBox') != -1) {
-            action = new GeoExt.Action(Ext.apply({
-                map: this.map,
-                control: new OpenLayers.Control.ZoomBox(config.controls),
-                toggleGroup: 'navigation',
-                allowDepress: false,
-                //text: 'zoom box',
-                iconCls: 'zoomin'
-            }, config.actions));
-            items.push(action);
-        }
-
-        if (config.items.indexOf('ZoomOut') != -1) {
-            action = new GeoExt.Action(Ext.apply({
-                map: this.map,
-                control: new OpenLayers.Control.ZoomBox(Ext.apply({out: true}, config.controls)),
-                toggleGroup: 'navigation',
-                allowDepress: false,
-                //text: 'zoom box',
-                iconCls: 'zoomout'
-            }, config.actions));
-            items.push(action);
-        }
-
-        if (config.items.indexOf('LengthMeasure') != -1) {
-            var measure = new MapFish.API.Measure(config.controls);
-            action = new GeoExt.Action(Ext.apply({
-                map: this.map,
-                control: measure.createLengthMeasureControl(),
-                toggleGroup: 'navigation',
-                allowDepress: false,
-                //text: 'length',
-                iconCls: 'measureLength'
-            }, config.actions));
-            items.push(action);
-        }
-
-        if (config.items.indexOf('AreaMeasure') != -1) {
-            var measure = new MapFish.API.Measure(config.controls);
-            action = new GeoExt.Action(Ext.apply({
-                map: this.map,
-                control: measure.createAreaMeasureControl(),
-                toggleGroup: 'navigation',
-                allowDepress: false,
-                //text: 'area',
-                iconCls: 'measureArea'
-            }, config.actions));
-            items.push(action);
-        }
-
-        if (config.items.indexOf('NavigationHistory') != -1) {
-            var history = new OpenLayers.Control.NavigationHistory(config.controls);
-            history.activate();
-            this.map.addControl(history);
-
-            action = new GeoExt.Action(Ext.apply({
-                tooltip: OpenLayers.i18n("previous"),
-                control: history.previous,
-                iconCls: 'previous',
-                disabled: true
-            }, config.actions));
-            items.push(action);
-
-            action = new GeoExt.Action(Ext.apply({
-                tooltip: OpenLayers.i18n("next"),
-                control: history.next,
-                iconCls: 'next',
-                disabled: true
-            }, config.actions));
-            items.push(action);
-        }
-
-        if (config.items.indexOf('DrawFeature') != -1) {
-            var handlers = mapfish.Util.fixArray(
-                    config.drawHandlers || ['Point', 'Path', 'Polygon']);
-            for (var i = 0; i < handlers.length; i++) {
-                var control = new OpenLayers.Control.DrawFeature(
-                        this.getDrawingLayer(),
-                        OpenLayers.Handler[handlers[i]],
-                        config.controls);
-                this.map.addControl(control);
-                action = new GeoExt.Action(Ext.apply({
-                    map: this.map,
-                    control: control,
-                    toggleGroup: 'navigation',
-                    allowDepress: false,
-                    iconCls: 'draw' + handlers[i]
-                }, config.actions));
-                items.push(action);
-            }
-        }
-
-        if (config.items.indexOf('ClearFeatures') != -1) {
-            var scope = this;
-            action = new Ext.Button(Ext.apply({
-                handler: function() {
-                    scope.getDrawingLayer().destroyFeatures()
-                },
-                iconCls: 'clearfeatures'
-            }, config.actions));
-            items.push(action);
-        }
-
-        return items;
+    initClearFeatures: function (config) {
+        var scope = this;
+        var action = new Ext.Button(Ext.apply({
+            handler: function() {
+                scope.getDrawingLayer().destroyFeatures()
+            },
+            iconCls: 'clearfeatures'
+        }, config.actions));
+        this.tools.push(action);
     },
 
     /**
