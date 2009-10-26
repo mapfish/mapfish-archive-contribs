@@ -4,20 +4,16 @@ MapFish.API.Measure = OpenLayers.Class({
 
     prevPopup: null,
 
+    options: null,
+
     /**
      * Constructor: MapFish.API.Measure()
      *  Distance/area measure tools
      */
     initialize: function(config) {
         Ext.apply(this, config);
-    },
 
-    /**
-     * Method: createLengthMeasureControl()
-    */
-    createLengthMeasureControl: function() {
-        return new OpenLayers.Control.Measure(
-            OpenLayers.Handler.Path, {
+        this.options = Ext.apply({
                 persist: true,
                 handlerOptions: {
                     layerOptions: {styleMap: this.getStyleMap()}
@@ -28,8 +24,17 @@ MapFish.API.Measure = OpenLayers.Class({
                     'deactivate': this.deactivateTool,
                     scope: this
                 }
-                
-            }
+
+            }, config.options);
+    },
+
+    /**
+     * Method: createLengthMeasureControl()
+     */
+    createLengthMeasureControl: function() {
+        return new OpenLayers.Control.Measure(
+            OpenLayers.Handler.Path, 
+            this.options
         );
     },
 
@@ -38,18 +43,8 @@ MapFish.API.Measure = OpenLayers.Class({
      */
     createAreaMeasureControl: function() {
         return new OpenLayers.Control.Measure(
-            OpenLayers.Handler.Polygon, {
-                persist: true,
-                handlerOptions: {
-                    layerOptions: {styleMap: this.getStyleMap()}
-                },
-                eventListeners: {
-                    'measure': this.renderMeasure,
-                    'measurepartial': this.clearMeasure,
-                    'deactivate': this.deactivateTool,
-                    scope: this
-                }
-            }
+            OpenLayers.Handler.Polygon,
+            this.options
         );
     },
 
