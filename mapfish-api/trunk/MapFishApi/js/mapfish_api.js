@@ -375,6 +375,7 @@ MapFish.API = OpenLayers.Class({
      * Create and return an {mapfish.widgets.LayerTree}
      *
      * Parameters:
+     * config.id - the LayerTree id
      * config.div - div where to place the LayerTree
      * config.layers - layers in the tree
      * config.title - title of the tree
@@ -384,6 +385,7 @@ MapFish.API = OpenLayers.Class({
         config = config || {};
         if (config.div) {
             this.tree = new mapfish.widgets.LayerTree({
+                id: config.id,
                 map: this.map,
                 renderTo: config.div,
                 height: 'auto',
@@ -408,6 +410,7 @@ MapFish.API = OpenLayers.Class({
             // We use a LayerTree object rather than a lazy config because
             // we later need a real object in this.tree.
             this.tree = new mapfish.widgets.LayerTree({
+                id: config.id,
                 title: config.title,
                 map: this.map,
                 showWmsLegend: config.showWmsLegend,
