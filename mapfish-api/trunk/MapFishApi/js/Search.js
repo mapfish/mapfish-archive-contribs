@@ -100,9 +100,9 @@ MapFish.API.Search = OpenLayers.Class({
             styleMap: new OpenLayers.StyleMap({
                 "default": {
                     pointRadius: 11, 
-                    fillColor: "#FFFFFF",
+                    fillColor: "#CCFF33",
                     fillOpacity: 0.8,
-                    strokeColor: "#666666",
+                    strokeColor: "#668800",
                     strokeOpacity: 0.8,
                     strokeWidth: 1
                 },
