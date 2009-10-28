@@ -11,7 +11,16 @@ MapFish.API.Measure = OpenLayers.Class({
      *  Distance/area measure tools
      */
     initialize: function(config) {
+        
         Ext.apply(this, config);
+
+        options = function() {
+           if (!Ext.isEmpty(config.options)) {
+            return config.options;
+           } else {
+            return null;
+           } 
+        },
 
         this.options = Ext.apply({
                 persist: true,
@@ -25,7 +34,7 @@ MapFish.API.Measure = OpenLayers.Class({
                     scope: this
                 }
 
-            }, config.options);
+            }, options);
     },
 
     /**
