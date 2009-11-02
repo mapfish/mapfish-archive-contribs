@@ -14,13 +14,10 @@ MapFish.API.Measure = OpenLayers.Class({
         
         Ext.apply(this, config);
 
-        options = function() {
-           if (!Ext.isEmpty(config.options)) {
-            return config.options;
-           } else {
-            return null;
-           } 
-        },
+        var options = null;
+        if (!Ext.isEmpty(config.options)) {
+            options = config.options;
+        };
 
         this.options = Ext.apply({
                 persist: true,
