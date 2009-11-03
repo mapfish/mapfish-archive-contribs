@@ -103,6 +103,12 @@ MapFish.API = OpenLayers.Class({
     tools: null,
 
     /**
+     * Property: activatePopup
+     * Activate the popups of the drawLayer
+     */
+    activatePopup: true,
+
+    /**
      * Constructor: MapFish.API(config)
      * Create and return an instance of the MapFish API
      *
@@ -132,6 +138,9 @@ MapFish.API = OpenLayers.Class({
 
         this.debug = Boolean(this.baseConfig.debug);
         this.isMainApp = Boolean(this.baseConfig.isMainApp);
+        if (typeof this.baseConfig.activatePopup !='undefined') {
+            this.activatePopup = this.baseConfig.activatePopup;
+        };
         this.layerTreeNodes = [];
 
         // set lang using following order:
@@ -447,15 +456,15 @@ MapFish.API = OpenLayers.Class({
              'ZoomOut', 'DrawFeature', 'ClearFeatures' */
         ]}, config);
         this.tools = [];
-        
+
         // init all enabled tools
         for (var i = 0; i < config.items.length; i++) {
-          this['init' + config.items[i]](config);
+            this['init' + config.items[i]](config);
         }
 
         return this.tools;
     },
-    
+
     initZoomToMaxExtent: function (config) {
         var action = new GeoExt.Action(Ext.apply({
             map: this.map,
@@ -1070,9 +1079,11 @@ MapFish.API = OpenLayers.Class({
                 this.selectCtrl.activate();
                 this.drawLayer.events.on({
                     featureselected: function(e) {
-                        this.showPopup({
-                            feature: e.feature
-                        });
+                        if (this.activatePopup) {
+                            this.showPopup({
+                                feature: e.feature
+                            });
+                        };
                         document.body.style.cursor = 'default';
                     },
                     scope: this
