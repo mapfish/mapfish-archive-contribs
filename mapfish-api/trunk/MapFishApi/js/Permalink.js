@@ -47,7 +47,7 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
      */
     draw: function() {
         OpenLayers.Control.prototype.draw.apply(this, arguments);
-    
+
         this.map.events.on({
             'moveend': this.updateLink,
             'changelayer': this.updateLink,
@@ -58,11 +58,11 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
         // Make it so there is at least a link even though the map may not have
         // moved yet.
         this.updateLink();
-    
+
         return this.div;
-    },  
-   
-    /** 
+    },
+
+    /**
      * Method: updateLink()
      *
      * Update the permalink
@@ -70,12 +70,12 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
     updateLink: function() {
         var href = this.base;
         if (href.indexOf('?') != -1) {
-            href = href.substring( 0, href.indexOf('?') );
+            href = href.substring(0, href.indexOf('?'));
         }
 
         href += '?' + OpenLayers.Util.getParameterString(this.createParams());
         if (this.element) {
-           this.element.value = href; // FIXME: only OK for input fields
+            this.element.value = href; // FIXME: only OK for input fields
         }
     },
 
@@ -91,10 +91,17 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
      */
     createParams: function(center, zoom, layers) {
         if (this.map) {
-           center = center || this.map.getCenter();
+            center = center || this.map.getCenter();
         } else {
             return '';
         }
+        ;
+
+        if (OpenLayers.String.contains(this.base, '?')) {
+        } else {
+            this.base = this.base + "?";
+        }
+        ;
 
         var params = OpenLayers.Util.getParameters(this.base);
 
@@ -112,20 +119,20 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
 
             if (this.displayProjection) {
                 var mapPosition = OpenLayers.Projection.transform(
-                  { x: lon, y: lat },
-                  this.map.getProjectionObject(),
-                  this.displayProjection );
+                { x: lon, y: lat },
+                        this.map.getProjectionObject(),
+                        this.displayProjection);
                 lon = mapPosition.x;
                 lat = mapPosition.y;
             }
-            params[this.coordsParams.lat] = Math.round(lat*100000)/100000;
-            params[this.coordsParams.lon] = Math.round(lon*100000)/100000;
+            params[this.coordsParams.lat] = Math.round(lat * 100000) / 100000;
+            params[this.coordsParams.lon] = Math.round(lon * 100000) / 100000;
 
             // layers selection
             params.layers = null; // neutralizes OL behaviour for layers
             var layertree = this.api.tree;
             if (layertree) {
-                var nodes = []; 
+                var nodes = [];
                 var checkedNodes = layertree.getChecked();
                 for (var i = 0, len = checkedNodes.length; i < len; i++) {
                     var node = checkedNodes[i];
