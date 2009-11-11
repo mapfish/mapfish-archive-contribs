@@ -12,6 +12,7 @@ MapFish.API.Measure = OpenLayers.Class({
      */
     initialize: function(config) {
         
+        config = config || {};
         Ext.apply(this, config);
 
         var options = null;
