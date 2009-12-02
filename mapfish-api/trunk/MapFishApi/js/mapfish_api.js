@@ -136,6 +136,9 @@ MapFish.API = OpenLayers.Class({
 
         this.baseConfig = config || {};
 
+        // see http://trac.openlayers.org/ticket/2371
+        OpenLayers.Tile.Image.useBlankTile = false;
+
         this.debug = Boolean(this.baseConfig.debug);
         this.isMainApp = Boolean(this.baseConfig.isMainApp);
         if (typeof this.baseConfig.activatePopup !='undefined') {
