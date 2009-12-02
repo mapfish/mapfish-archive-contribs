@@ -470,6 +470,12 @@ MapFish.API = OpenLayers.Class({
         return this.tools;
     },
 
+    initSeparator: function (config) {
+        this.tools.push(new Ext.Toolbar.Spacer());
+        this.tools.push(new Ext.Toolbar.Separator());
+        this.tools.push(new Ext.Toolbar.Spacer());
+    },
+
     initZoomToMaxExtent: function (config) {
         var action = new GeoExt.Action(Ext.apply({
             map: this.map,
