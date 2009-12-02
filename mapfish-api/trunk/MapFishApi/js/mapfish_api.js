@@ -227,6 +227,8 @@ MapFish.API = OpenLayers.Class({
             } else if (config.bbox) {
                 this.map.zoomToExtent(new OpenLayers.Bounds.fromArray(config.bbox));
             } else if (this.baseConfig.initialExtent) {
+                // FIXME: buggy when layout is done after recentering (then recentering params are incorrect)
+                // workaround: explicitely call zoomToExtent after layout rendering
                 this.map.zoomToExtent(new OpenLayers.Bounds.fromArray(this.baseConfig.initialExtent));
             } else {
                 this.map.zoomToMaxExtent();
