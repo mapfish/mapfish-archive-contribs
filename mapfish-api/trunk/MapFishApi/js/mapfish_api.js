@@ -476,6 +476,10 @@ MapFish.API = OpenLayers.Class({
         this.tools.push(new Ext.Toolbar.Spacer());
     },
 
+    initFillToolbar: function (config) {
+        this.tools.push('->');
+    },
+
     initZoomToMaxExtent: function (config) {
         var action = new GeoExt.Action(Ext.apply({
             map: this.map,
