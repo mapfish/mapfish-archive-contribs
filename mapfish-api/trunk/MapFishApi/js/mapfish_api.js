@@ -1016,7 +1016,7 @@ MapFish.API = OpenLayers.Class({
 
     /**
      * Method: updateLayerTreeFromPermalink()
-     * Update the permalink according to the layer tree
+     * Update the layertree according to the permalink
      *
      * Works only if layertree is a mapfish.widgets.LayerTree and has id attributes
      * for all of its nodes.

@@ -95,13 +95,11 @@ MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
         } else {
             return '';
         }
-        ;
 
         if (OpenLayers.String.contains(this.base, '?')) {
         } else {
             this.base = this.base + "?";
         }
-        ;
 
         var params = OpenLayers.Util.getParameters(this.base);
 
