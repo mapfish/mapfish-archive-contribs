@@ -44,6 +44,9 @@ MapFish.API.Search = OpenLayers.Class({
     
             this.recenterProtocol = new mapfish.Protocol.MapFish({
                 url: this.api.baseConfig.recenterUrl,
+                params: {
+                    lang: OpenLayers.Lang.getCode()
+                },
                 callback: this.recenterProtocolCallback,
                 scope: this
             });
@@ -52,6 +55,9 @@ MapFish.API.Search = OpenLayers.Class({
         if (!config.disableQuery) { 
             this.queryProtocol = new mapfish.Protocol.MapFish({
                 url: this.api.baseConfig.queryUrl,
+                params: {
+                    lang: OpenLayers.Lang.getCode()
+                },
                 format: new OpenLayers.Format.JSON()
             });
             
