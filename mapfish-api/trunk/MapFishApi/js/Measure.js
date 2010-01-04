@@ -1,3 +1,7 @@
+/**
+ * @requires OpenLayers/Control/Measure.js
+ */
+
 Ext.namespace("MapFish");
 
 MapFish.API.Measure = OpenLayers.Class({
