@@ -1,21 +1,4 @@
 /*
-* @include OpenLayers/Control/PanZoom.js
-* @include OpenLayers/Control/ArgParser.js
-* @include OpenLayers/Control/Attribution.js
-* @include OpenLayers/Control/Navigation.js
-* @include OpenLayers/Control/SelectFeature.js
-* @include OpenLayers/Layer/Vector.js
-* @include OpenLayers/Renderer.js
-* @include OpenLayers/Renderer/Canvas.js
-* @include OpenLayers/Renderer/SVG.js
-* @include OpenLayers/Renderer/VML.js
-* @include OpenLayers/Style.js
-* @include OpenLayers/StyleMap.js
-* @include GeoExt/widgets/MapPanel.js
-* @include GeoExt/widgets/Action.js
-* @include GeoExt/widgets/ZoomSlider.js
-* @include GeoExt/widgets/tips/ZoomSliderTip.js
-* @include GeoExt/widgets/tree/LayerContainer.js
 * @include ArgParser.js
 * @include Permalink.js
 * @include AddWmsLayerPanel.js

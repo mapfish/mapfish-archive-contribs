@@ -1,7 +1,3 @@
-/**
- * @requires OpenLayers/Control/SelectFeature.js
- */
-
 Ext.namespace("MapFish");
  
 MapFish.API.Search = OpenLayers.Class({

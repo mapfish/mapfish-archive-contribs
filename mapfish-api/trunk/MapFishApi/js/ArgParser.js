@@ -1,7 +1,3 @@
-/**
- * @requires OpenLayers/Control/ArgParser.js
- */
-
 Ext.namespace("MapFish");
 
 MapFish.API.ArgParser = OpenLayers.Class(OpenLayers.Control.ArgParser, {
