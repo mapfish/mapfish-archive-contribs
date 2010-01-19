@@ -47,7 +47,9 @@ MapFish.API.ArgParser = OpenLayers.Class(OpenLayers.Control.ArgParser, {
             if (typeof args.layerNodes == 'string') {
                 args.layerNodes = [args.layerNodes];
             }
-            this.api.layerTreeNodes = args.layerNodes;
+            if (this.api) {
+                this.api.layerTreeNodes = args.layerNodes;
+            }
         }
 
         var lon = args[this.coordsParams.lon];
