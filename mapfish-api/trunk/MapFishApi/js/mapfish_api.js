@@ -147,6 +147,10 @@ MapFish.API = OpenLayers.Class({
      * (end)
      */
     initialize: function(config) {
+
+        Ext.QuickTips.init();
+        Ext.BLANK_IMAGE_URL = OpenLayers.Util.getImagesLocation() + "blank.gif";
+
         this.apiId = mapFishApiPool.createRef(this);
 
         this.baseConfig = config || {};
