@@ -1,3 +1,10 @@
+/**
+* @requires MapFishApi/js/mapfish_api.js
+* @requires OpenLayers/BaseTypes/Class.js
+* @requires OpenLayers/Control/Permalink.js
+* @requires OpenLayers/Util.js
+*/
+
 Ext.namespace("MapFish");
 
 MapFish.API.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {

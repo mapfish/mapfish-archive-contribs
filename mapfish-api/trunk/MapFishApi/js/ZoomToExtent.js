@@ -1,3 +1,9 @@
+/**
+* @requires MapFishApi/js/mapfish_api.js
+* @requires OpenLayers/BaseTypes/Class.js
+* @requires OpenLayers/Control.js
+*/
+
 Ext.namespace("MapFish");
 
 MapFish.API.ZoomToExtent = OpenLayers.Class(OpenLayers.Control, {

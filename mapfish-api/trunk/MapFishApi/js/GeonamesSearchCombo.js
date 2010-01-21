@@ -1,3 +1,9 @@
+/**
+* @requires MapFishApi/js/mapfish_api.js
+* @requires OpenLayers/BaseTypes/LonLat.js
+* @requires OpenLayers/Projection.js
+*/
+
 Ext.namespace("MapFish");
 
 MapFish.API.GeoNamesSearchCombo = Ext.extend(Ext.form.ComboBox, {

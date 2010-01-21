@@ -1,3 +1,19 @@
+/**
+* @requires MapFishApi/js/mapfish_api.js
+* @requires core/Protocol/MapFish.js
+* @requires core/Protocol/TriggerEventDecorator.js
+* @requires core/Protocol/MergeFilterDecorator.js
+* @requires core/Searcher/Map.js
+* @requires OpenLayers/BaseTypes/Class.js
+* @requires OpenLayers/Control/SelectFeature.js
+* @requires OpenLayers/Feature/Vector.js
+* @requires OpenLayers/Format/JSON.js
+* @requires OpenLayers/Geometry/Point.js
+* @requires OpenLayers/Lang.js
+* @requires OpenLayers/Layer/Vector.js
+* @requires OpenLayers/StyleMap.js
+*/
+
 Ext.namespace("MapFish");
  
 MapFish.API.Search = OpenLayers.Class({

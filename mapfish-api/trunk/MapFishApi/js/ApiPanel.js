@@ -1,3 +1,7 @@
+/**
+* @requires MapFishApi/js/mapfish_api.js
+*/
+
 Ext.namespace("MapFish");
 
 // Replaces all instances of the given substring.

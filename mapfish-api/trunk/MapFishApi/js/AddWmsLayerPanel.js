@@ -1,3 +1,7 @@
+/**
+* @requires MapFishApi/js/mapfish_api.js
+*/
+
 Ext.namespace("MapFish");
 
 MapFish.API.AddWmsLayerFormPanel = Ext.extend(Ext.Panel, {

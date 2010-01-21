@@ -1,3 +1,14 @@
+/**
+* @requires MapFishApi/js/mapfish_api.js
+* @requires OpenLayers/BaseTypes/Class.js
+* @requires OpenLayers/Control/Measure.js
+* @requires OpenLayers/Handler/Path.js
+* @requires OpenLayers/Handler/Polygon.js
+* @requires OpenLayers/Lang.js
+* @requires OpenLayers/Rule.js
+* @requires OpenLayers/StyleMap.js
+*/
+
 Ext.namespace("MapFish");
 
 MapFish.API.Measure = OpenLayers.Class({
