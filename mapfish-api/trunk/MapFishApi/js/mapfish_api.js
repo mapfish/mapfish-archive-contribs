@@ -1,33 +1,35 @@
-/*
-* @requires widgets/tree/LayerTree.js
-* @requires widgets/tree/LayerTreeExtra.js
-* @requires OpenLayers.js
-* @requires OpenLayers/BaseTypes/Bounds.js
-* @requires OpenLayers/BaseTypes/Class.js
-* @requires OpenLayers/BaseTypes/LonLat.js
-* @requires OpenLayers/Control/DrawFeature.js
-* @requires OpenLayers/Control/NavigationHistory.js
-* @requires OpenLayers/Control/SelectFeature.js
-* @requires OpenLayers/Control/ZoomBox.js
-* @requires OpenLayers/Feature/Vector.js
-* @requires OpenLayers/Format/GeoJSON.js
-* @requires OpenLayers/Geometry/Point.js
-* @requires OpenLayers/Handler.js
-* @requires OpenLayers/Renderer.js
-* @requires OpenLayers/Renderer/Canvas.js
-* @requires OpenLayers/Renderer/SVG.js
-* @requires OpenLayers/Renderer/VML.js
-* @requires OpenLayers/Request.js
-* @requires OpenLayers/Lang.js
-* @requires OpenLayers/Layer/Vector.js
-* @requires OpenLayers/Map.js
-* @requires OpenLayers/Style.js
-* @requires OpenLayers/StyleMap.js
-* @requires OpenLayers/Tile/Image.js
-* @requires OpenLayers/Util.js
-* @requires GeoExt/widgets/MapPanel.js
-* @requires GeoExt/widgets/Popup.js
-*/
+/**
+ * @include MapFishApi/js/ZoomToExtent.js
+ * @requires widgets/tree/LayerTree.js
+ * @requires widgets/tree/LayerTreeExtra.js
+ * @requires OpenLayers.js
+ * @requires OpenLayers/BaseTypes/Bounds.js
+ * @requires OpenLayers/BaseTypes/Class.js
+ * @requires OpenLayers/BaseTypes/LonLat.js
+ * @requires OpenLayers/Control/DrawFeature.js
+ * @requires OpenLayers/Control/NavigationHistory.js
+ * @requires OpenLayers/Control/SelectFeature.js
+ * @requires OpenLayers/Control/ZoomBox.js
+ * @requires OpenLayers/Feature/Vector.js
+ * @requires OpenLayers/Format/GeoJSON.js
+ * @requires OpenLayers/Geometry/Point.js
+ * @requires OpenLayers/Handler.js
+ * @requires OpenLayers/Renderer.js
+ * @requires OpenLayers/Renderer/Canvas.js
+ * @requires OpenLayers/Renderer/SVG.js
+ * @requires OpenLayers/Renderer/VML.js
+ * @requires OpenLayers/Request.js
+ * @requires OpenLayers/Lang.js
+ * @requires OpenLayers/Layer/Vector.js
+ * @requires OpenLayers/Map.js
+ * @requires OpenLayers/Style.js
+ * @requires OpenLayers/StyleMap.js
+ * @requires OpenLayers/Tile/Image.js
+ * @requires OpenLayers/Util.js
+ * @requires GeoExt/widgets/Action.js
+ * @requires GeoExt/widgets/MapPanel.js
+ * @requires GeoExt/widgets/Popup.js
+ */
 
 Ext.namespace("MapFish");
 
