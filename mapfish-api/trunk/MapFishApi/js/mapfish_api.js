@@ -531,7 +531,7 @@ MapFish.API = OpenLayers.Class({
 
     initNavigation: function (config) {
         var action = new Ext.Button(Ext.apply({
-            toggleGroup: 'navigation',
+            toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
             pressed: true,
             id: 'navigationButton',
@@ -545,7 +545,7 @@ MapFish.API = OpenLayers.Class({
         var action = new GeoExt.Action(Ext.apply({
             map: this.map,
             control: new OpenLayers.Control.ZoomBox(config.controls),
-            toggleGroup: 'navigation',
+            toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
             //text: 'zoom box',
             iconCls: 'zoomin'
@@ -557,7 +557,7 @@ MapFish.API = OpenLayers.Class({
         var action = new GeoExt.Action(Ext.apply({
             map: this.map,
             control: new OpenLayers.Control.ZoomBox(Ext.apply({out: true}, config.controls)),
-            toggleGroup: 'navigation',
+            toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
             //text: 'zoom box',
             iconCls: 'zoomout'
@@ -570,7 +570,7 @@ MapFish.API = OpenLayers.Class({
         var action = new GeoExt.Action(Ext.apply({
             map: this.map,
             control: measure.createLengthMeasureControl(),
-            toggleGroup: 'navigation',
+            toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
             //text: 'length',
             iconCls: 'measureLength'
@@ -583,7 +583,7 @@ MapFish.API = OpenLayers.Class({
         var action = new GeoExt.Action(Ext.apply({
             map: this.map,
             control: measure.createAreaMeasureControl(),
-            toggleGroup: 'navigation',
+            toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
             //text: 'area',
             iconCls: 'measureArea'
@@ -625,7 +625,7 @@ MapFish.API = OpenLayers.Class({
             var action = new GeoExt.Action(Ext.apply({
                 map: this.map,
                 control: control,
-                toggleGroup: 'navigation',
+                toggleGroup: config.toggleGroup || 'navigation',
                 allowDepress: false,
                 iconCls: 'draw' + handlers[i]
             }, config.actions));
