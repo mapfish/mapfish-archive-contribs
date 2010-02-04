@@ -189,16 +189,6 @@ MapFish.API = OpenLayers.Class({
         if (lang) {
             OpenLayers.Lang.setCode(lang);
         }
-
-        if (!this.debug) {
-            // keep missing tiles transparent:
-            OpenLayers.Util.onImageLoadError = function() {
-                this.style.display = "none";
-                // set the img src because webkit don't take the display into
-                // account and display a "broken image" icon.
-                this.src = Ext.BLANK_IMAGE_URL;
-            };
-        }
     },
 
     /**
