@@ -511,10 +511,10 @@ MapFish.API = OpenLayers.Class({
         var action = new GeoExt.Action(Ext.apply({
             map: this.map,
             control: new MapFish.API.ZoomToExtent(config.controls),
-            iconCls: 'zoomfull'
+            iconCls: 'zoomfull',
             //toggleGroup: 'navigation',
             //allowDepress: false,
-            //text: "max extent"
+            tooltip: OpenLayers.i18n("max extent")
         }, config.actions));
         this.tools.push(action);
     },
@@ -525,7 +525,7 @@ MapFish.API = OpenLayers.Class({
             allowDepress: false,
             pressed: true,
             id: 'navigationButton',
-            //text: 'nav',
+            tooltip: OpenLayers.i18n('pan'),
             iconCls: 'pan'
         }, config.actions));
         this.tools.push(action);
@@ -537,7 +537,7 @@ MapFish.API = OpenLayers.Class({
             control: new OpenLayers.Control.ZoomBox(config.controls),
             toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
-            //text: 'zoom box',
+            tooltip: OpenLayers.i18n('zoom box'),
             iconCls: 'zoomin'
         }, config.actions));
         this.tools.push(action);
@@ -549,7 +549,7 @@ MapFish.API = OpenLayers.Class({
             control: new OpenLayers.Control.ZoomBox(Ext.apply({out: true}, config.controls)),
             toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
-            //text: 'zoom box',
+            tooltip: OpenLayers.i18n('zoom out'),
             iconCls: 'zoomout'
         }, config.actions));
         this.tools.push(action);
@@ -562,7 +562,7 @@ MapFish.API = OpenLayers.Class({
             control: measure.createLengthMeasureControl(),
             toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
-            //text: 'length',
+            tooltip: OpenLayers.i18n('length measure'),
             iconCls: 'measureLength'
         }, config.actions));
         this.tools.push(action);
@@ -575,7 +575,7 @@ MapFish.API = OpenLayers.Class({
             control: measure.createAreaMeasureControl(),
             toggleGroup: config.toggleGroup || 'navigation',
             allowDepress: false,
-            //text: 'area',
+            tooltip: OpenLayers.i18n('area measure'),
             iconCls: 'measureArea'
         }, config.actions));
         this.tools.push(action);
