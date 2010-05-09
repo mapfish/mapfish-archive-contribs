@@ -424,41 +424,25 @@ MapFish.API = OpenLayers.Class({
      */
     createLayerTree: function(config) {
         config = config || {};
+        var options = {
+            id: config.id,
+            map: this.map,
+            showWmsLegend: config.showWmsLegend,
+            model: this.getLayerTreeModel(),
+            plugins: [
+                mapfish.widgets.LayerTree.createContextualMenuPlugin(['opacitySlideDirect'])
+            ]
+        }
         if (config.div) {
-            this.tree = new mapfish.widgets.LayerTree({
-                id: config.id,
-                map: this.map,
+            Ext.apply(options, {
                 renderTo: config.div,
-                height: 'auto',
-                showWmsLegend: config.showWmsLegend,
-                model: this.getLayerTreeModel(),
-                plugins: [
-                    mapfish.widgets.LayerTree.createContextualMenuPlugin(['opacitySlideDirect'])
-                ]
+                height: 'auto'
             });
-            if (config.layers) {
-                var checkedNodes = this.tree.getChecked();
-                for (var i = 0, n = checkedNodes.length; i < n; i++) {
-                    this.tree.setNodeChecked(checkedNodes[i], false);
-                }
-                for (var i = 0, n = config.layers.length; i < n; i++) {
-                    var layer = config.layers[i];
-                    var node = this.tree.nodeIdToNode[layer];
-                    this.tree.setNodeChecked(node, true);
-                }
-            }
         } else {
             // We use a LayerTree object rather than a lazy config because
             // we later need a real object in this.tree.
-            this.tree = new mapfish.widgets.LayerTree({
-                id: config.id,
+            Ext.apply(options, {
                 title: config.title,
-                map: this.map,
-                showWmsLegend: config.showWmsLegend,
-                model: this.getLayerTreeModel(),
-                plugins: [
-                    mapfish.widgets.LayerTree.createContextualMenuPlugin(['opacitySlideDirect'])
-                ],
                 listeners: {
                     checkchange: function(node, checked) {
                         var permalink = this.map.getControl('mapfish.api.permalink');
@@ -469,6 +453,21 @@ MapFish.API = OpenLayers.Class({
                 }
             });
         }
+        
+        this.tree = new mapfish.widgets.LayerTree(options);
+        
+        if (config.layers) {
+            var checkedNodes = this.tree.getChecked();
+            for (var i = 0, n = checkedNodes.length; i < n; i++) {
+                this.tree.setNodeChecked(checkedNodes[i], false);
+            }
+            for (var i = 0, n = config.layers.length; i < n; i++) {
+                var layer = config.layers[i];
+                var node = this.tree.nodeIdToNode[layer];
+                this.tree.setNodeChecked(node, true);
+            }
+        }
+        
         return this.tree;
     },
 
