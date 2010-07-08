@@ -133,6 +133,9 @@ MapFish.API.Search = OpenLayers.Class({
                     fillColor: "#FF0000",
                     strokeColor: "#880000",
                     cursor: "pointer"
+                },
+                "delete": {
+                    display: "none"
                 }
             })
         });
