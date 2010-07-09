@@ -664,8 +664,9 @@ MapFish.API = OpenLayers.Class({
      * Parameters:
      * layer - name of the layer
      * ids - array of feature id
+     * pointZoomLevel - point zoom level
      */
-    recenterOnObjects: function(layer, ids) {
+    recenterOnObjects: function(layer, ids, pointZoomLevel) {
         if (this.isMainApp) {
             OpenLayers.Request.GET({
                 url: this.baseConfig.baseUrl + this.recenterUrl,
@@ -673,7 +674,7 @@ MapFish.API = OpenLayers.Class({
                 success: function(response) {
                     var f = new OpenLayers.Format.JSON();
                     var bbox = f.read(response.responseText);
-                    this.recenterOnBbox(bbox);
+                    this.recenterOnBbox(bbox, pointZoomLevel);
                 },
                 scope: this
             });
@@ -696,7 +697,7 @@ MapFish.API = OpenLayers.Class({
                 params:{
                     layers: layer,
                     ids: [ids],
-                    cb: 'mapFishApiPool.apiRefs[' + this.apiId + '].recenterOnBboxCb'
+                    cb: 'mapFishApiPool.apiRefs[' + this.apiId + '].recenterOnBboxCb(' + pointZoomLevel + ')'
                 }
             });
         }
@@ -744,9 +745,10 @@ MapFish.API = OpenLayers.Class({
      * Parameters:
      * layer - name of the layer
      * ids - array of feature id
+     * pointZoomLevel - point zoom level
      */
-    showFeatures: function(layer, ids) {
-        this.recenterOnObjects(layer, ids);
+    showFeatures: function(layer, ids, pointZoomLevel) {
+        this.recenterOnObjects(layer, ids, pointZoomLevel);
         this.highlightObjects(layer, ids);
     },
 
@@ -1070,11 +1072,11 @@ MapFish.API = OpenLayers.Class({
 
     /* Private methods */
 
-    recenterOnBboxCb: function(r) {
+    recenterOnBboxCb: function(r, pointZoomLevel) {
         this.recenterOnBbox(r.rows[0].bbox);
     },
 
-    recenterOnBbox: function(bbox) {
+    recenterOnBbox: function(bbox, pointZoomLevel) {
         var bounds = new OpenLayers.Bounds(bbox[0], bbox[1], bbox[2], bbox[3]);
         if (bounds.getWidth() && bounds.getHeight()) {
             this.map.zoomToExtent(bounds);
@@ -1082,7 +1084,11 @@ MapFish.API = OpenLayers.Class({
             // bbox is actually a point
             var center = bounds.getCenterLonLat();
             if (center.lat && center.lon) {
-                this.map.setCenter(center, 19); // FIXME: make zoom variable
+                if (pointZoomLevel) {
+                    this.map.setCenter(center, pointZoomLevel);
+                } else {
+                    this.map.setCenter(center, 19);
+                }
             }
         }
     },
@@ -1092,7 +1098,6 @@ MapFish.API = OpenLayers.Class({
         var features = geo.read(r.rows[0].features);
         if (features) {
             var layer = this.getDrawingLayer();
-            ;
             layer.addFeatures(features);
         }
     },
