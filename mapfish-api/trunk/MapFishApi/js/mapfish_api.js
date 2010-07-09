@@ -178,9 +178,9 @@ MapFish.API = OpenLayers.Class({
 
         this.debug = Boolean(this.baseConfig.debug);
         this.isMainApp = Boolean(this.baseConfig.isMainApp);
-        if (typeof this.baseConfig.activatePopup !='undefined') {
+        if (typeof this.baseConfig.activatePopup != 'undefined') {
             this.activatePopup = this.baseConfig.activatePopup;
-        };
+        }
         this.layerTreeNodes = [];
 
         // set lang using following order:
@@ -188,6 +188,16 @@ MapFish.API = OpenLayers.Class({
         var lang = this.baseConfig.lang || ($('lang') ? $('lang').value : null) || this.lang;
         if (lang) {
             OpenLayers.Lang.setCode(lang);
+        }
+
+        if (!this.debug) {
+            // keep missing tiles transparent:
+            OpenLayers.Util.onImageLoadError = function() {
+                this.style.display = "none";
+                // set the img src because webkit don't take the display into
+                // account and display a "broken image" icon.
+                this.src = Ext.BLANK_IMAGE_URL;
+            };
         }
     },
 
@@ -453,9 +463,9 @@ MapFish.API = OpenLayers.Class({
                 }
             });
         }
-        
+
         this.tree = new mapfish.widgets.LayerTree(options);
-        
+
         if (config.layers) {
             var checkedNodes = this.tree.getChecked();
             for (var i = 0, n = checkedNodes.length; i < n; i++) {
@@ -467,7 +477,7 @@ MapFish.API = OpenLayers.Class({
                 this.tree.setNodeChecked(node, true);
             }
         }
-        
+
         return this.tree;
     },
 
@@ -1129,7 +1139,8 @@ MapFish.API = OpenLayers.Class({
                             this.showPopup({
                                 feature: e.feature
                             });
-                        };
+                        }
+                        ;
                         document.body.style.cursor = 'default';
                     },
                     scope: this
