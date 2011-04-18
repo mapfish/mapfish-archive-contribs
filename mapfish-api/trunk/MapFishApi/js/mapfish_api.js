@@ -2,9 +2,7 @@
  * @include MapFishApi/js/ZoomToExtent.js
  * @requires widgets/tree/LayerTree.js
  * @requires widgets/tree/LayerTreeExtra.js
- * @requires OpenLayers.js
  * @requires OpenLayers/BaseTypes/Bounds.js
- * @requires OpenLayers/BaseTypes/Class.js
  * @requires OpenLayers/BaseTypes/LonLat.js
  * @requires OpenLayers/Control/DrawFeature.js
  * @requires OpenLayers/Control/NavigationHistory.js
