@@ -183,7 +183,7 @@ MapFish.API = OpenLayers.Class({
 
         // set lang using following order:
         // API instance config > lang param in HTML > extended API class property
-        var lang = this.baseConfig.lang || ($('lang') ? $('lang').value : null) || this.lang;
+        var lang = this.baseConfig.lang || (OpenLayers.Util.getElement('lang') ? OpenLayers.Util.getElement('lang').value : null) || this.lang;
         if (lang) {
             OpenLayers.Lang.setCode(lang);
         }
